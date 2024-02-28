@@ -20,7 +20,6 @@ public class ScriptableCharacter : ScriptableObject
     //perhaps sliders for personality
 }
 
-
 public class Character : MonoBehaviour
 {
     //a character will have some stats and a behaviourtree.

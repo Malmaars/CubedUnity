@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
-using TMPro;
+﻿
 
 namespace BehaviourTree
 {
@@ -15,8 +11,6 @@ namespace BehaviourTree
         //Every Node also needs to be able to run
         public abstract Result Run();
     }
-
-
 
     //Selector
     public class Selector : Node
