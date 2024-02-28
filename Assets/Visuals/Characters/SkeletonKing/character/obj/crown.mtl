@@ -1,0 +1,12 @@
+# Blender MTL File: 'MCOTMC_October2021_SkeletonKing_Source.blend'
+# Material Count: 1
+
+newmtl Copper
+Ns 527.955082
+Ka 0.409091 0.409091 0.409091
+Kd 0.295672 0.139004 0.052788
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 3

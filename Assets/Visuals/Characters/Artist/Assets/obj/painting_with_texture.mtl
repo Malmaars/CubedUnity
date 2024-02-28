@@ -1,0 +1,34 @@
+# Blender MTL File: 'MCOTMC_August2022_Painter_Source.blend'
+# Material Count: 3
+
+newmtl Beige
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.702916 0.425324 0.206894
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl White
+Ns 323.999994
+Ka 1.000000 1.000000 1.000000
+Kd 0.799103 0.799103 0.799103
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl place_texture_here
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\Kay Lousberg\\Desktop\\Work\\Gameassets\\Kay Lousberg Assets\\KayKit\\Characters\\Maker\\MCOTMC\\Artist Export\\painting.png
+map_d C:\\Users\\Kay Lousberg\\Desktop\\Work\\Gameassets\\Kay Lousberg Assets\\KayKit\\Characters\\Maker\\MCOTMC\\Artist Export\\painting.png
