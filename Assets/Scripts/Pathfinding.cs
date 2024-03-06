@@ -24,30 +24,6 @@ public class pathNode : IPoolable
     public float hDist, fDist;
 
     public pathNode() { }
-
-    public pathNode(Cube _cube, pathNode _parent)
-    {
-        myCube = _cube;
-        parent = _parent;
-    }
-
-    public pathNode(Cube _cube, Cube destination, pathNode _parent)
-    {
-        myCube = _cube;
-        hDist = Vector3.Distance(_cube.visual.transform.position, destination.visual.transform.position);
-        fDist = Vector3.Distance(_cube.visual.transform.position, _parent.myCube.visual.transform.position) + _parent.fDist;
-        dist = fDist + hDist;
-        parent = _parent;
-    }
-
-    public pathNode(Cube _cube, Cube destination, Cube origin)
-    {
-        myCube = _cube;
-        hDist = Vector3.Distance(_cube.visual.transform.position, destination.visual.transform.position);
-        fDist = Vector3.Distance(_cube.visual.transform.position, origin.visual.transform.position);
-        dist = fDist + hDist;
-    }
-
     public void SetValues(Cube _cube, Cube destination, Cube origin)
     {
         myCube = _cube;
@@ -190,14 +166,42 @@ public static class FindRoom
                     //make a new node
                     pathNode node = NodePool.RequestItem();
                     node.SetParent(cb, destination, current);
-                    open.Add(node.myCube, node);
 
                     if (cb == destination)
                     {
-                        Debug.Log("Found the destination");
-                        Debug.Log(destination.visual.name + ", " + cb.visual.name);
+                        //Debug.Log("Found the destination");
+                        //Debug.Log(destination.visual.name + ", " + cb.visual.name);
+
+                        open.Remove(current.myCube);
+                        closed.Add(current.myCube, current);
+
+                        foreach (KeyValuePair<Cube, pathNode> pair in open)
+                        {
+                            //I can return all the pathnodes in the open list to the pool, since they won't be used anyway
+                            NodePool.ReturnObjectToPool(pair.Value);
+                        }
+                        open.Clear();
+
+                        //I will also return all the unused nodes in the closed list
+                        //First remove all the used nodes from the closed list
+                        pathNode nodeTemp = node;
+                        while(nodeTemp != null)
+                        {
+                            closed.Remove(nodeTemp.myCube);
+                            nodeTemp = nodeTemp.parent;
+                        }
+
+                        //then remove all the other nodes in the closed list to the object pool
+                        foreach (KeyValuePair<Cube, pathNode> pair in closed)
+                        {
+                            NodePool.ReturnObjectToPool(pair.Value);
+                        }
+                        closed.Clear();
+
                         return node;
                     }
+
+                    open.Add(node.myCube, node);
                 }
 
                 else if (open.ContainsKey(cb))
@@ -216,5 +220,29 @@ public static class FindRoom
         }
 
         return null;
+    }
+
+    public static void ReturnPathNode(pathNode _node)
+    {
+        NodePool.ReturnObjectToPool(_node);
+    }
+
+    public static pathNode ReverseList(pathNode _head)
+    {
+        pathNode prev = null;
+        pathNode current = _head;
+        pathNode next = null;
+
+        while (current != null)
+        {
+            next = current.parent;
+            current.parent = prev;
+            prev = current;
+            current = next;
+        }
+
+        _head = prev;
+
+        return _head;
     }
 }

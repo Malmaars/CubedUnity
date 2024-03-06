@@ -28,7 +28,11 @@ public class Character : MonoBehaviour, ICharacter
 
     public Cube RequestRoom()
     {
+        if (Blackboard.debugMode)
+            return Blackboard.currentTarget;
+
         return Blackboard.allCubes[Random.Range(1, Blackboard.allCubes.Length)];
+        //return Blackboard.allCubes[12];
     }
 
     //a character will have some stats and a behaviourtree.
@@ -48,14 +52,15 @@ public class Character : MonoBehaviour, ICharacter
     void Start()
     {
         currentRoom = transform.parent.parent.GetComponent<Cube>();
+        actor = this.gameObject;
+        animator = GetComponent<Animator>();
 
-        FindRoom.Run(this);
-        //behaviourtree = new FindRoom(this);
-        //behaviourtree.Run();
+        behaviourtree = new GoToRoom(this);
     }
 
     // Update is called once per frame
     void Update()
     {
+        behaviourtree.Run();
     }
 }

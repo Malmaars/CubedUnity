@@ -21,8 +21,8 @@ public class Gamemanager : MonoBehaviour
         {
             pathNode nodeTemp = Blackboard.route;
             int index = 0;
-            Debug.Log(Blackboard.route.myCube.visual.name);
-            Debug.Log(Blackboard.route.dist);
+            //Debug.Log(Blackboard.route.myCube.visual.name);
+            //Debug.Log(Blackboard.route.dist);
             while (nodeTemp.parent != null)
             {
                 if (index == 0)
@@ -38,7 +38,7 @@ public class Gamemanager : MonoBehaviour
                 Handles.Label(nodeTemp.myCube.visual.transform.position, index.ToString(), style);
                 index++;
 
-                Debug.Log(nodeTemp.parent);
+                //Debug.Log(nodeTemp.parent);
                 nodeTemp = nodeTemp.parent;
                 if (nodeTemp.parent == null)
                     break;
