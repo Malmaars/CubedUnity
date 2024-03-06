@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 namespace BehaviourTree
 {
@@ -29,6 +30,31 @@ namespace BehaviourTree
             //else
             //return Result.failed
 
+        }
+    }
+
+    public class WalkToRoom : Node
+    {
+        pathNode path;
+        Character character;
+        public WalkToRoom(Character _character)
+        {
+            character = _character;
+        }
+
+        public override Result Run()
+        {
+            if(path == null)
+            {
+                path = FindRoom.Run(character);
+
+                //there is no possible path, operation failed
+                if (path == null)
+                    return Result.failed;
+            }
+
+            //there is a path, walk to the designated room
+            return Result.running;
         }
     }
 }

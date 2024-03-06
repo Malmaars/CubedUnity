@@ -160,6 +160,8 @@ namespace BehaviourTree
     //Base for conditional nodes
     public abstract class ConditionalNode : Node
     {
+        //a conditional node has a condition to run its child node. If the condition is failed, it can stop its child node
+
         //every conditional node needs a child it can run, and it can only be one child
         //if you want more children make the child a sequence or selector etc.
         private Node child;

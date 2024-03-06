@@ -20,8 +20,17 @@ public class ScriptableCharacter : ScriptableObject
     //perhaps sliders for personality
 }
 
-public class Character : MonoBehaviour
+public class Character : MonoBehaviour, ICharacter
 {
+    public GameObject actor { get; set; }
+    public Animator animator { get; set; }
+    public Cube currentRoom { get; set; }
+
+    public Cube RequestRoom()
+    {
+        return Blackboard.allCubes[Random.Range(1, Blackboard.allCubes.Length)];
+    }
+
     //a character will have some stats and a behaviourtree.
     //maybe an inventory as well
 
@@ -38,12 +47,15 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        currentRoom = transform.parent.parent.GetComponent<Cube>();
+
+        FindRoom.Run(this);
+        //behaviourtree = new FindRoom(this);
+        //behaviourtree.Run();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 }
