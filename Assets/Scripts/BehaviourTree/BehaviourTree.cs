@@ -91,7 +91,6 @@ namespace BehaviourTree
         }
         public override Result Run()
         {
-
             //Success Parallel runs all its children simultaneously until one of them returns success, or all of them return failed
             int amountOfFailures = 0;
             for (; currentIndex < children.Length; currentIndex++)
@@ -218,6 +217,22 @@ namespace BehaviourTree
             result = child.Run();
 
             return result;
+        }
+    }
+
+    //a decorator can have only one child, and will change the outcome, or the way that child is running
+    public class Decorator : Node
+    {
+        Node child;
+
+        public Decorator(Node _child)
+        {
+            child = _child;
+        }
+
+        public override Result Run()
+        {
+            return child.Run();
         }
     }
 }

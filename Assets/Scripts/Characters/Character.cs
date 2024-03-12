@@ -9,6 +9,13 @@ public enum characterType
     astronaut
 }
 
+public enum characterNeeds
+{
+    hunger,
+    social,
+    relax
+}
+
 [CreateAssetMenu(fileName = "Character", menuName = "ScriptableObjects/Character", order = 1)]
 public class ScriptableCharacter : ScriptableObject
 {
@@ -55,6 +62,11 @@ public class Character : MonoBehaviour, ICharacter
         actor = this.gameObject;
         animator = GetComponent<Animator>();
 
+        //behaviourtree = new Selector(
+        //                    new CheckBoolean(true, true,
+        //                        new GoToRoom(this)),
+        //                    new Idle()); 
+        //            
         behaviourtree = new GoToRoom(this);
     }
 
@@ -62,5 +74,12 @@ public class Character : MonoBehaviour, ICharacter
     void Update()
     {
         behaviourtree.Run();
+    }
+
+    public void SetRoom(Cube newRoom)
+    {
+        currentRoom = newRoom;
+        actor.transform.parent = newRoom.visual.transform.GetChild(2);
+
     }
 }

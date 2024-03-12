@@ -86,9 +86,6 @@ public static class FindRoom
 
         if (!CheckIfPossible(character.currentRoom))
             return null;
-
-        
-        //pathNode originalNode = new pathNode(character.currentRoom, destination, character.currentRoom);
         
         pathNode originalNode = NodePool.RequestItem();
         originalNode.SetValues(character.currentRoom, destination, character.currentRoom);
@@ -169,9 +166,6 @@ public static class FindRoom
 
                     if (cb == destination)
                     {
-                        //Debug.Log("Found the destination");
-                        //Debug.Log(destination.visual.name + ", " + cb.visual.name);
-
                         open.Remove(current.myCube);
                         closed.Add(current.myCube, current);
 

@@ -33,19 +33,29 @@ namespace BehaviourTree
         }
     }
 
+    public class Idle : Node
+    {
+        public override Result Run()
+        {
+           return Result.running;
+        }
+    }
+
     public class GoToRoom : Node
     {
         pathNode path;
         Character character;
-        bool doneWalking;
         public GoToRoom(Character _character)
         {
             character = _character;
         }
 
+
+        //I need some way to check when the arrangement of the cubes changes. Even while the character is walking
+        //I could actively check if the neighbor of the cube is the same as the cube it's going to. When that changes, the character knows its path has changed
         public override Result Run()
         {
-            if (path == null && !doneWalking)
+            if (path == null)
             {
                 path = FindRoom.Run(character);
                 path = FindRoom.ReverseList(path);
@@ -57,13 +67,23 @@ namespace BehaviourTree
 
             Vector3 dest = new Vector3(path.myCube.visual.transform.position.x, path.myCube.visual.transform.position.y - 0.48f, path.myCube.visual.transform.position.z + 0.4f);
 
+
             //the destination should always be above, to the right, to the left, or below the character. Never multiple
-            if(dest.x < character.actor.transform.position.x)
+            if (dest.x < character.actor.transform.position.x)
             {
                 //face and walk left
                 character.actor.transform.forward = Vector3.left;
                 character.animator.SetBool("Walking", true);
                 character.actor.transform.position += (dest - character.actor.transform.position).normalized * Time.deltaTime * 0.5f;
+
+                //if(path.myCube != character.currentRoom && path.myCube != character.currentRoom.neighbors[2])
+                //{
+                //    Debug.Log("Route has changed.");
+                //    //the route has changed. Back up
+                //    //set path to null?
+                //    path = null;
+                //    return Result.failed;
+                //}
             }
 
             else if (dest.x > character.actor.transform.position.x)
@@ -79,7 +99,7 @@ namespace BehaviourTree
                 //jump up
                 Debug.Log("Jumping up");
                 character.animator.SetBool("Jump", true);
-                character.actor.transform.position += (dest - character.actor.transform.position).normalized * Time.deltaTime * 2f;
+                character.actor.transform.position += Vector3.ClampMagnitude((dest - character.actor.transform.position).normalized * Time.deltaTime * 2f, Vector3.Distance(dest, character.actor.transform.position));
             }
 
             else if(dest.y < character.actor.transform.position.y)
@@ -87,14 +107,23 @@ namespace BehaviourTree
                 //jump down
                 Debug.Log("Jumping down");
                 character.animator.SetBool("Jump", true);
-                character.actor.transform.position += (dest - character.actor.transform.position).normalized * Time.deltaTime * 2f;
+                character.actor.transform.position += Vector3.ClampMagnitude((dest - character.actor.transform.position).normalized * Time.deltaTime * 2f, Vector3.Distance(dest, character.actor.transform.position));
+            }
+
+            //set the new cube as the current room when the character breaches the threshold the wall. Not when he just reached the destination
+            if (path != null && character.currentRoom != path.myCube &&
+                Vector3.Distance(character.actor.transform.position, path.myCube.visual.transform.position) < Vector3.Distance(character.actor.transform.position, character.currentRoom.visual.transform.position))
+            {
+                character.SetRoom(path.myCube);
             }
 
             if (Vector3.Distance(character.actor.transform.position, dest) < 0.01f)
             {
-                character.actor.transform.position = dest;
                 character.animator.SetBool("Walking", false);
                 character.animator.SetBool("Jump", false);
+                
+                //pause a second until the next step?
+                character.actor.transform.position = dest;
                 character.currentRoom = path.myCube;
                 pathNode temp = path.parent;
                 FindRoom.ReturnPathNode(path);

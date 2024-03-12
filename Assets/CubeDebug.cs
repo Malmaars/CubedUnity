@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class CubeDebug : MonoBehaviour
 {
-    private void OnMouseDown()
+    private void OnMouseOver()
     {
-        //select the cube for the character to walk to, simply by clicking on it
-
-        if (Blackboard.debugMode)
-            Blackboard.currentTarget = GetComponent<Cube>();
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (Blackboard.debugMode)
+                Blackboard.currentTarget = GetComponent<Cube>();
+        }
     }
 }
