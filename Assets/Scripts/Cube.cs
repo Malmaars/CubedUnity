@@ -7,7 +7,7 @@ public class Cube : MonoBehaviour
     public GameObject visual;
     Character owner;
 
-    List<Character> currentInhabitants;
+    public List<Character> currentInhabitants;
 
     //tracks the neighbors of this cube. 0 is the neighbor to the right of the cube, 1 is above, 2 is to left, 3 is down
     public Cube[] neighbors = new Cube[4];

@@ -6,7 +6,6 @@ using BehaviourTree;
 //Conditional node that checks for a boolean to be equal to a given value
 public class CheckBoolean : ConditionalNode
 {
-    Node child;
     bool boolToCheck;
     bool boolValueWeWant;
 

@@ -35,17 +35,26 @@ namespace BehaviourTree
 
     public class Idle : Node
     {
+        float timer = Random.Range(2,10);
         public override Result Run()
         {
+            //play an idle animation, for now we can keep this empty
+            timer -= Time.deltaTime;
+            if(timer <= 0)
+            {
+                timer = Random.Range(2, 10);
+                return Result.success;
+            }
+
            return Result.running;
         }
     }
 
-    public class GoToRoom : Node
+    public class GoToRandomRoom : Node
     {
         pathNode path;
         Character character;
-        public GoToRoom(Character _character)
+        public GoToRandomRoom(Character _character)
         {
             character = _character;
         }
@@ -74,7 +83,7 @@ namespace BehaviourTree
                 //face and walk left
                 character.actor.transform.forward = Vector3.left;
                 character.animator.SetBool("Walking", true);
-                character.actor.transform.position += (dest - character.actor.transform.position).normalized * Time.deltaTime * 0.5f;
+                character.actor.transform.position += Vector3.ClampMagnitude((dest - character.actor.transform.position).normalized * Time.deltaTime * 0.5f, Vector3.Distance(dest, character.actor.transform.position));
 
                 //if(path.myCube != character.currentRoom && path.myCube != character.currentRoom.neighbors[2])
                 //{
@@ -91,13 +100,12 @@ namespace BehaviourTree
                 //face and walk right
                 character.actor.transform.forward = Vector3.right;
                 character.animator.SetBool("Walking", true);
-                character.actor.transform.position += (dest - character.actor.transform.position).normalized * Time.deltaTime * 0.5f;
+                character.actor.transform.position += Vector3.ClampMagnitude((dest - character.actor.transform.position).normalized * Time.deltaTime * 0.5f, Vector3.Distance(dest, character.actor.transform.position));
             }
 
             if (dest.y > character.actor.transform.position.y)
             {
                 //jump up
-                Debug.Log("Jumping up");
                 character.animator.SetBool("Jump", true);
                 character.actor.transform.position += Vector3.ClampMagnitude((dest - character.actor.transform.position).normalized * Time.deltaTime * 2f, Vector3.Distance(dest, character.actor.transform.position));
             }
@@ -105,7 +113,6 @@ namespace BehaviourTree
             else if(dest.y < character.actor.transform.position.y)
             {
                 //jump down
-                Debug.Log("Jumping down");
                 character.animator.SetBool("Jump", true);
                 character.actor.transform.position += Vector3.ClampMagnitude((dest - character.actor.transform.position).normalized * Time.deltaTime * 2f, Vector3.Distance(dest, character.actor.transform.position));
             }
@@ -124,7 +131,7 @@ namespace BehaviourTree
                 
                 //pause a second until the next step?
                 character.actor.transform.position = dest;
-                character.currentRoom = path.myCube;
+                character.SetRoom(path.myCube);
                 pathNode temp = path.parent;
                 FindRoom.ReturnPathNode(path);
                 path = temp;

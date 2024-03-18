@@ -95,7 +95,36 @@ public static class FindRoom
 
         if (path != null)
         {
-            Debug.Log("Path found");
+            Blackboard.route = path;
+            return path;
+        }
+
+        return null;
+    }
+
+    //Run variant where we can pass through a custom destination
+    public static pathNode Run(Character _character, Cube _cube)
+    {
+        character = _character;
+        open.Clear();
+        closed.Clear();
+
+        destination = _cube;
+
+        if (destination == null)
+            return null;
+
+        if (!CheckIfPossible(character.currentRoom))
+            return null;
+
+        pathNode originalNode = NodePool.RequestItem();
+        originalNode.SetValues(character.currentRoom, destination, character.currentRoom);
+
+        open.Add(originalNode.myCube, originalNode);
+        path = FindPath();
+
+        if (path != null)
+        {
             Blackboard.route = path;
             return path;
         }

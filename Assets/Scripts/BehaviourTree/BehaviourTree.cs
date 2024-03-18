@@ -1,4 +1,6 @@
-﻿
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace BehaviourTree
 {
@@ -10,6 +12,53 @@ namespace BehaviourTree
 
         //Every Node also needs to be able to run
         public abstract Result Run();
+    }
+
+    //these are nodes that invoke reactions from other characters. 
+    public class InvokeNode : Node
+    {
+        //These Nodes will have a child node (the reaction), but they will assign it themselves
+        protected ReactionNode child;
+
+        public override Result Run()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected void EndReaction()
+        {
+            child.done = true;
+        }
+    }
+
+    //A node for a node that serves as a reaction. They always return running, and are dependent on the InvokeNode parent.
+    public class ReactionNode : Node
+    {
+        //bool accessed by Invoke Node. When it is called, the ReactionNode knows to finish
+        public bool done;
+        public override Result Run()
+        {
+            if(done)
+            {
+                return Result.success;
+            }
+
+            return Result.running;
+        }
+    }
+
+    //Need nodes are nodes that are dependent on what the character needs.
+    public class NeedNode : Node
+    {
+        public override Result Run()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public float CalculatePriority()
+        {
+            return 0;
+        }
     }
 
     //Selector
@@ -44,6 +93,46 @@ namespace BehaviourTree
         }
     }
 
+    //Random Selector
+    //The Random Selector randomly selects one of its children to run
+    public class RandomSelector : Node
+    {
+        private Node selectedChild;
+        private Node[] children;
+        private int currentIndex = 0;
+        private bool running = false;
+        public RandomSelector(params Node[] _children)
+        {
+            children = _children;
+        }
+        public override Result Run()
+        {
+            if (!running)
+            {
+                selectedChild = children[Random.Range(0, children.Length)];
+                running = true;
+            }
+
+            while(running)
+            {
+                Result result = children[currentIndex].Run();
+
+                switch (result)
+                {
+                    case Result.failed:
+                        break;
+                    case Result.success:
+                        return Result.success;
+                    case Result.running:
+                        return Result.running;
+                }
+            }
+
+            currentIndex = 0;
+            return Result.failed;
+        }
+    }
+
     //Sequencer
     public class Sequence : Node
     {
@@ -55,7 +144,6 @@ namespace BehaviourTree
         }
         public override Result Run()
         {
-
             //The sequence goes through all its children and stops when one returns failed
             for (; currentIndex < children.Length; currentIndex++)
             {
@@ -163,7 +251,7 @@ namespace BehaviourTree
 
         //every conditional node needs a child it can run, and it can only be one child
         //if you want more children make the child a sequence or selector etc.
-        private Node child;
+        protected Node child;
 
         public override Result Run()
         {
