@@ -38,6 +38,7 @@ public class Character : MonoBehaviour, ICharacter
     public StateMachine sm;
 
     public bool interacting;
+    public bool resetTree;
 
     public Cube RequestRoom()
     {
@@ -70,17 +71,21 @@ public class Character : MonoBehaviour, ICharacter
         actor = this.gameObject;
         animator = GetComponent<Animator>();
 
-        sm = new StateMachine(new Selector(
-                                    new Sequence(
-                                        new Idle(),
+                              //The interruptor is so a character can break out of the tree if neccesary
+        sm = new StateMachine(new Interruptor(new CheckReset(this), 
+                                    new Selector(
                                         new Sequence(
-                                            new LookForTarget(this),
-                                            new LockTarget(this),
-                                            new GoToTarget(this),
-                                            new Talk(this)),
-                                        new GoToRandomRoom(this)
-                                            )), 
-                                            this);
+                                            new Idle(),
+                                            //sequence for talking to another character
+                                            new ForcedSequence(
+                                                new LookForTarget(this),
+                                                new LockTarget(this),
+                                                new GoToTarget(this),
+                                                new FaceOwnerAndTarget(this),
+                                                new Talk(this)),
+                                            new GoToRandomRoom(this)
+                                                ))), 
+                                                this);
     }
 
     // Update is called once per frame

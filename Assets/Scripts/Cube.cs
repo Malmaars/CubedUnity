@@ -19,6 +19,49 @@ public class Cube : MonoBehaviour
     void Awake()
     {
         visual = this.gameObject;
+
+        //for now I want to let the cubes assign their neighbors on startup, so I don't have to manually input it every time
+
+        //if there is no collider at the overlapsphere, the query should be stopped
+        Collider[] colTemp = Physics.OverlapSphere(visual.transform.position - Vector3.left, 0.1f);
+        if (colTemp.Length > 0)
+            ConnectNeighbor(colTemp[0].GetComponent<Cube>(), 0);
+
+        colTemp = Physics.OverlapSphere(visual.transform.position + Vector3.up, 0.1f);
+        if (colTemp.Length > 0)
+            ConnectNeighbor(colTemp[0].GetComponent<Cube>(), 1);
+
+        colTemp = Physics.OverlapSphere(visual.transform.position + Vector3.left, 0.1f);
+        if (colTemp.Length > 0)
+            ConnectNeighbor(colTemp[0].GetComponent<Cube>(), 2);
+
+        colTemp = Physics.OverlapSphere(visual.transform.position - Vector3.up, 0.1f);
+        if (colTemp.Length > 0)
+            ConnectNeighbor(colTemp[0].GetComponent<Cube>(), 3);
+
+        for (int i = 0; i < neighbors.Length; i++)
+        {
+            //also remove it as neighbor from its neighbors
+            if (neighbors[i] != null)
+            {
+                switch (i)
+                {
+                    case 0:
+                        neighbors[i].ConnectNeighbor(this, 2);
+                        break;
+                    case 1:
+                        neighbors[i].ConnectNeighbor(this, 3);
+                        break;
+                    case 2:
+                        neighbors[i].ConnectNeighbor(this, 0);
+                        break;
+                    case 3:
+                        neighbors[i].ConnectNeighbor(this, 1);
+                        break;
+                }
+            }
+        }
+
     }
 
     // Update is called once per frame

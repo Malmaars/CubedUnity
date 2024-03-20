@@ -15,6 +15,7 @@ public class LockTarget : Node
         owner.interacting = true;
         owner.target.sm.SetToWait();
 
+        //this might not be the best way to cancel the current animation
         foreach (AnimatorControllerParameter parameter in owner.target.animator.parameters)
         {
             if (parameter.type == AnimatorControllerParameterType.Bool)

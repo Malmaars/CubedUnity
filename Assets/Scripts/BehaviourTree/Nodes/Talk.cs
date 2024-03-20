@@ -32,7 +32,6 @@ public class Talk : InvokeNode
             Debug.Log("Starting new conversation");
             if (SearchForCharacter() == Result.failed)
             {
-                owner.target.sm.ResetState();
                 return Result.failed;
             }
 
@@ -55,13 +54,6 @@ public class Talk : InvokeNode
 
         //if it succeeded, that means the target is known, and the target is in the same room
         //invoke a reaction from the target, and start talking
-
-        //this is very much a temporary solution. If I don't check this, this function won't run properly, and the target will be locked in the waiting state. AND I DON'T KNOW WHY
-        if(owner.target.actor.transform.position != new Vector3(owner.target.currentRoom.visual.transform.position.x, owner.target.currentRoom.visual.transform.position.y - 0.48f, owner.target.currentRoom.visual.transform.position.z + 0.4f))
-        {
-            //wait a little, let them walk to their place
-            return Result.running;
-        }
 
         Debug.Log("Talking...");
         timer -= Time.deltaTime;
@@ -105,6 +97,7 @@ public class TalkReaction : ReactionNode
         if(done)
         {
             character.animator.SetBool("Talk", false);
+            ExitNode();
             return Result.success;
         }
 

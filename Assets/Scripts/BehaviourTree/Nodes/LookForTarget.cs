@@ -18,7 +18,7 @@ public class LookForTarget : Node
     Result CheckIfPossible(Cube origin)
     {
         visited.Clear();
-        if (origin.currentInhabitants.Count > 1)
+        if (origin.currentInhabitants.Count > 1 && origin.currentInhabitants.Count < 3)
         {
             foreach(Character inhabitant in origin.currentInhabitants)
             {
@@ -50,7 +50,7 @@ public class LookForTarget : Node
             if (visited.Contains(cb))
                 continue;
 
-            if (cb.currentInhabitants.Count > 0)
+            if (cb.currentInhabitants.Count > 0 && cb.currentInhabitants.Count < 2)
             {
                 foreach (Character inhabitant in cb.currentInhabitants)
                 {

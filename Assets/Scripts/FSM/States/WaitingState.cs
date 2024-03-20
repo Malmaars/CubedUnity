@@ -13,7 +13,7 @@ public class WaitingState : State
     public override void LogicUpdate()
     {
         //the character should wait and do nothing
-        tree.Run();
+        //tree.Run();
     }
     public override void Exit()
     {

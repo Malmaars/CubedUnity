@@ -29,7 +29,7 @@ public class ReactionState : State
 
     public override void Exit()
     {
-        base.Exit();
         done = false;
+        base.Exit();
     }
 }

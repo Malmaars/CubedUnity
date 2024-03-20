@@ -45,6 +45,11 @@ namespace BehaviourTree
 
             return Result.running;
         }
+
+        public void ExitNode()
+        {
+            done = false;
+        }
     }
 
     //Need nodes are nodes that are dependent on what the character needs.
@@ -154,6 +159,37 @@ namespace BehaviourTree
                     case Result.failed:
                         currentIndex = 0;
                         return Result.failed;
+                    case Result.success:
+                        break;
+                    case Result.running:
+                        return Result.running;
+                }
+            }
+
+            currentIndex = 0;
+            return Result.success;
+        }
+    }
+
+    //A forced sequence will go through each child regardless if they retrun success or failed
+    public class ForcedSequence : Node
+    {
+        private Node[] children;
+        private int currentIndex = 0;
+        public ForcedSequence(params Node[] _children)
+        {
+            children = _children;
+        }
+        public override Result Run()
+        {
+            for (; currentIndex < children.Length; currentIndex++)
+            {
+                Result result = children[currentIndex].Run();
+
+                switch (result)
+                {
+                    case Result.failed:
+                        break;
                     case Result.success:
                         break;
                     case Result.running:
