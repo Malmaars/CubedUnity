@@ -7,12 +7,17 @@ using BehaviourTree;
 public class Gamemanager : MonoBehaviour
 {
     public bool debugMode;
-    public Cube[] allCubes;
+    //public Cube[] allCubes;
 
     private void Awake()
     {
         Blackboard.debugMode = debugMode;
-        Blackboard.allCubes = allCubes;
+        //Blackboard.allCubes = allCubes;
+    }
+
+    private void Start()
+    {
+        //Debug.Log(Blackboard.allCubes.Count);
     }
 
     private void SpawnCube()

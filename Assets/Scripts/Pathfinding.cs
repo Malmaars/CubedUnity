@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,9 @@ public class pathNode : IPoolable
     public pathNode parent;
     public float dist;
     public float hDist, fDist;
+
+    //direction will be an int from 0 to 3 
+    public int direction = 5;
 
     public pathNode() { }
     public void SetValues(Cube _cube, Cube destination, Cube origin)
@@ -133,13 +137,48 @@ public static class FindRoom
     }
 
     static List<Cube> visited = new List<Cube>();
-    static bool CheckIfPossible(Cube origin)
+    public static bool CheckIfPossible(Cube origin)
     {
         visited.Clear();
+
+        if (destination.occupied)
+            return false;
+
         if (origin == destination)
             return true;
 
         return CheckNeighbors(origin);
+    }
+    
+    public static bool CheckIfPossible(Cube origin, Cube _destination)
+    {
+        visited.Clear();
+        if (origin == _destination)
+            return true;
+
+        return CheckNeighborsSeparated(origin, _destination);
+    }
+
+    static bool CheckNeighborsSeparated(Cube _cube, Cube _destination)
+    {
+        foreach (Cube cb in _cube.neighbors)
+        {
+            if (cb == null)
+                continue;
+
+            if (visited.Contains(cb))
+                continue;
+
+            if (cb == _destination)
+                return true;
+
+            visited.Add(cb);
+            bool temp = CheckNeighborsSeparated(cb, _destination);
+
+            if (temp)
+                return true;
+        }
+        return false;
     }
 
     static bool CheckNeighbors(Cube _cube)
@@ -192,7 +231,10 @@ public static class FindRoom
                     //make a new node
                     pathNode node = NodePool.RequestItem();
                     node.SetParent(cb, destination, current);
+                    node.direction = Array.IndexOf(current.myCube.neighbors, cb);
 
+
+                    //if the cube is the destination, end the loop
                     if (cb == destination)
                     {
                         open.Remove(current.myCube);
@@ -232,7 +274,11 @@ public static class FindRoom
                     //if the new distance is shorter, change the value
                     if (open[cb].fDist > current.fDist + Vector3.Distance(current.myCube.visual.transform.position, open[cb].myCube.visual.transform.position))
                     {
+                        //value change
                         open[cb].SetNewCost(current);
+
+                        //We pass the direction that is received. So if a character walks to the "next cube" to the right, the "next cube" knows the character should be going right when entering the cube
+                        open[cb].direction = Array.IndexOf(current.myCube.neighbors, cb);
                     }
                 }
             }

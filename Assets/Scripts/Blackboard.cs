@@ -24,7 +24,7 @@ public static class Blackboard
 {
     public static bool debugMode;
 
-    public static Cube[] allCubes;
+    public static List<Cube> allCubes = new List<Cube>();
 
     public static pathNode route;
 

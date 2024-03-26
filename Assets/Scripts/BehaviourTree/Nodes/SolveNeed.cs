@@ -2,23 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BehaviourTree;
-
-public class SolveNeed : Node
+namespace BehaviourTree
 {
-    NeedType type;
-    Need toSolve;
-
-    public SolveNeed(NeedType _type, Need _toSolve)
+    public class SolveNeed : Node
     {
-        type = _type;
-        toSolve = _toSolve;
-    }
+        NeedType type;
+        Need toSolve;
 
-    public override Result Run()
-    {
-        //look for services nearby, and pick the most suitable one
+        public SolveNeed(NeedType _type, Need _toSolve)
+        {
+            type = _type;
+            toSolve = _toSolve;
+        }
 
-        //if there are no services nearby, return failed
-        return Result.running;
+        public override Result Run()
+        {
+            //look for services nearby, and pick the most suitable one
+
+            //if there are no services nearby, return failed
+            return Result.running;
+        }
     }
 }

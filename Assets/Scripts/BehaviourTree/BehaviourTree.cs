@@ -14,9 +14,49 @@ namespace BehaviourTree
         public abstract Result Run();
     }
 
+    //A node that can grant an item to something
+    public class ItemNode : Node
+    {
+        InventoryItem item;
+        public override Result Run()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    //service nodes are nodes that can be invoked gathered by a character, and they will invoke it on themselves
+    public class ServiceNode : Node
+    {
+        //these nodes need to keep a reference to the owner, so they can switch themselves back to their base state
+        Character owner;
+
+        //the action they will perform. If it returns failed or success, put the character back into their base state
+        Node child;
+
+        public override Result Run()
+        {
+            Result result = child.Run();
+
+            if (result == Result.failed || result == Result.success)
+            {
+                EndService();
+            }
+            return result;
+        }
+
+        protected void EndService()
+        {
+            owner.interacting = false;
+            owner.ResetTree();
+        }
+    }
+
     //these are nodes that invoke reactions from other characters. 
     public class InvokeNode : Node
     {
+        //Every invoke node requires an owner (the one that invokes)
+        Character owner;
+
         //These Nodes will have a child node (the reaction), but they will assign it themselves
         protected ReactionNode child;
 
@@ -28,12 +68,16 @@ namespace BehaviourTree
         protected void EndReaction()
         {
             child.done = true;
+            owner.interacting = false;
+            owner.target = null;
+            owner.target.ResetTree();
         }
     }
 
     //A node for a node that serves as a reaction. They always return running, and are dependent on the InvokeNode parent.
     public class ReactionNode : Node
     {
+        
         //bool accessed by Invoke Node. When it is called, the ReactionNode knows to finish
         public bool done;
         public override Result Run()
@@ -171,7 +215,7 @@ namespace BehaviourTree
         }
     }
 
-    //A forced sequence will go through each child regardless if they retrun success or failed
+    //A forced sequence will go through each child regardless if they return success or failed
     public class ForcedSequence : Node
     {
         private Node[] children;
@@ -317,7 +361,7 @@ namespace BehaviourTree
         Node actionsUponExit;
 
         //Interruptor version that performs specific action(s) when interrupting
-        public Interruptor(ConditionalNode _condition, Node _child, Node _actionsUponExit)
+        public Interruptor(ConditionalNode _condition, Node _actionsUponExit, Node _child)
         {
             condition = _condition;
             child = _child;

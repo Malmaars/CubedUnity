@@ -11,6 +11,7 @@ public class StateMachine
 
     //A character will only have one reaction active at a time, so this serves as a singular objectpool
     private ReactionState reactState;
+    private ServiceState serviceState;
 
     public StateMachine(Node _tree, Character _owner)
     {
@@ -96,18 +97,25 @@ public class StateMachine
         //Break the current state and switch to the preferred reaction
         //The reaction will consist of a node, and we can run it like we would a behaviourtree. This means a reaction can also be a sequence of actions.
 
-        if(reactState == null)
-        {
-            //make a new reaction state
-            reactState = new ReactionState();
-            reactState.SetTree(reactionNode);
-        }
+        //make a new reaction state
 
-        else
-        {
-            reactState.SetTree(reactionNode);
-        }
+        if (reactState == null)
+            reactState = new ReactionState();
+        
+
+        reactState.SetTree(reactionNode);
 
         SwitchState(reactState);
+    }
+
+    public void InvokeService(Node serviceNode)
+    {
+        //make a new reaction state
+        if (serviceState == null)
+            serviceState = new ServiceState();
+        
+        serviceState.SetTree(serviceNode);
+
+        SwitchState(serviceState);
     }
 }

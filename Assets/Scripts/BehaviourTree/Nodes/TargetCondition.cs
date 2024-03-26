@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviourTree;
 
-//A node that checks the condition that is the target of a character being able to interact with
-public class TargetCondition : ConditionalNode
+
+namespace BehaviourTree
 {
-    Character owner;
-
-    public TargetCondition(Character _owner, Node _child)
+    //A node that checks the condition that is the target of a character being able to interact with
+    public class TargetCondition : ConditionalNode
     {
-        owner = _owner;
-        child = _child;
-    }
+        Character owner;
 
-    public override Result Run()
-    {
-        if (owner.target == null)
-            return Result.failed;
+        public TargetCondition(Character _owner, Node _child)
+        {
+            owner = _owner;
+            child = _child;
+        }
 
-        return child.Run();
+        public override Result Run()
+        {
+            if (owner.target == null)
+                return Result.failed;
+
+            return child.Run();
+        }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IInventory
 {
-    protected List<Item> inventory { get; set; }
+    public List<InventoryItem> inventory { get; set; }
 
-    public void AddItemToInventory(Item _toAdd);
+    public void AddItemToInventory(InventoryItem _toAdd);
 }

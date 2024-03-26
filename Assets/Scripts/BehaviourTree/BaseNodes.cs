@@ -14,7 +14,7 @@ namespace BehaviourTree
 
     public class ItemExample : Node
     {
-        Item itemResultFromAction;
+        InventoryItem itemResultFromAction;
 
         IInventory holder;
         public ItemExample(IInventory inventoryHolder)
