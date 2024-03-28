@@ -6,33 +6,61 @@ namespace BehaviourTree
 {
     public class BuildSomething : Node
     {
-        Character character;
+        IServicable servicable;
 
         ParticleSystem MakingClouds;
         GameObject particlesObject;
 
         float timer = 5;
-        bool finalAnimation;
+        bool start = false;
 
         InventoryItem item;
+
+        public BuildSomething(IServicable _servicable)
+        {
+            Initialize(_servicable);
+        }
 
         //since this is a node for a cube, it needs to be able to be passed on to different characters. So the character needs to be able to be reassigned
 
         public override Result Run()
         {
+            if (!start)
+            {
+                particlesObject.transform.parent = servicable.asker.actor.transform;
+                particlesObject.transform.localPosition = Vector3.up * 2;
+                particlesObject.transform.localScale = Vector3.one;
+
+                servicable.asker.actor.transform.forward = -Vector3.forward;
+
+                servicable.asker.currentRoom.occupied = true;
+                servicable.asker.animator.SetBool("Build", true);
+                MakingClouds.Play();
+
+                item = new InventoryItem(Resources.Load("Items/stool") as GameObject);
+
+                item.visual.transform.position = servicable.asker.actor.transform.position + -Vector3.right * 0.25f + Vector3.up * 0.28f;
+                item.DisableItem();
+
+                start = true;
+            }
+
             if (MakingClouds.isPlaying)
                 return Result.running;
 
             //if we reach here, the particle system is done playing
 
+
             //play a final animation
             if (timer > 0)
             {
-                character.animator.SetBool("Build", false);
+                Debug.Log(servicable);
+                Debug.Log(servicable.asker);
+                servicable.asker.animator.SetBool("Build", false);
+                servicable.asker.actor.transform.forward = Vector3.forward;
 
                 //show acquired item
-                item = new InventoryItem(Resources.Load("Items/stool") as GameObject);
-                item.visual.transform.position = character.transform.position + Vector3.right * -0.85f + Vector3.up * 1.25f;
+                item.EnableItem();
                 item.animator.SetBool("Spin", true);
                 timer -= Time.deltaTime;
                 return Result.running;
@@ -42,34 +70,25 @@ namespace BehaviourTree
             {
                 timer = 5;
                 item.animator.SetBool("Spin", false);
-                character.AddItemToInventory(item);
-                character.currentRoom.occupied = false;
-                character.interacting = false;
-                character.animator.SetTrigger("Return");
+                Debug.Log("Adding item to inventory");
+                servicable.asker.AddItemToInventory(item);
+                servicable.asker.currentRoom.occupied = false;
+                servicable.asker.animator.SetTrigger("Return");
+                start = false;
                 return Result.success;
             }
         }
 
-        public void Initialize(Character c)
+        public void Initialize(IServicable _servicable)
         {
-            character = c;
+            servicable = _servicable;
 
             if (particlesObject == null)
             {
-                particlesObject = Object.Instantiate(Resources.Load("Particles/MakingClouds") as GameObject);
+                particlesObject = Object.Instantiate(Resources.Load("Particles/BuildParticles") as GameObject);
                 MakingClouds = particlesObject.GetComponent<ParticleSystem>();
             }
 
-            particlesObject.transform.parent = character.actor.transform;
-            particlesObject.transform.localPosition = Vector3.zero;
-            particlesObject.transform.localScale = Vector3.one;
-
-            character.actor.transform.forward = -Vector3.forward;
-
-            character.currentRoom.occupied = true;
-            character.interacting = true;
-            character.animator.SetBool("Build", true);
-            MakingClouds.Play();
         }
     }
 }

@@ -27,11 +27,16 @@ namespace BehaviourTree
     //service nodes are nodes that can be invoked gathered by a character, and they will invoke it on themselves
     public class ServiceNode : Node
     {
-        //these nodes need to keep a reference to the owner, so they can switch themselves back to their base state
-        Character owner;
 
+        IServicable servicable;
         //the action they will perform. If it returns failed or success, put the character back into their base state
         Node child;
+
+        public ServiceNode(IServicable _servicable ,Node _child) 
+        {
+            servicable = _servicable;
+            child = _child; 
+        }
 
         public override Result Run()
         {
@@ -41,13 +46,16 @@ namespace BehaviourTree
             {
                 EndService();
             }
+
+            servicable.asker.interacting = true;
             return result;
         }
 
         protected void EndService()
         {
-            owner.interacting = false;
-            owner.ResetTree();
+            servicable.asker.interacting = false;
+            servicable.asker.ResetTree();
+            servicable.asker = null;
         }
     }
 
@@ -55,7 +63,7 @@ namespace BehaviourTree
     public class InvokeNode : Node
     {
         //Every invoke node requires an owner (the one that invokes)
-        Character owner;
+        protected Character owner;
 
         //These Nodes will have a child node (the reaction), but they will assign it themselves
         protected ReactionNode child;
@@ -67,10 +75,11 @@ namespace BehaviourTree
 
         protected void EndReaction()
         {
-            child.done = true;
+            Debug.Log(owner.actor.name);
             owner.interacting = false;
-            owner.target = null;
             owner.target.ResetTree();
+            owner.target = null;
+            child.done = true;
         }
     }
 

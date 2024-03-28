@@ -29,4 +29,9 @@ public class InventoryItem
     {
         visual.SetActive(false);
     }
+
+    public void EnableItem()
+    {
+        visual.SetActive(true);
+    }
 }

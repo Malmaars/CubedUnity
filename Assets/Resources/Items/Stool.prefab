@@ -71,6 +71,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2238088803332026024, guid: 33017745cca02ed40891c02b96aa2246, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2238088803332026024, guid: 33017745cca02ed40891c02b96aa2246, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2238088803332026024, guid: 33017745cca02ed40891c02b96aa2246, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2238088803332026024, guid: 33017745cca02ed40891c02b96aa2246, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -110,9 +122,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2238088803332026024, guid: 33017745cca02ed40891c02b96aa2246, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7011995341315321247, guid: 33017745cca02ed40891c02b96aa2246, type: 3}
       propertyPath: m_Name
-      value: Stool 1
+      value: Stool
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

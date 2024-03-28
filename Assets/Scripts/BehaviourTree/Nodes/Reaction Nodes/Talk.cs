@@ -7,8 +7,6 @@ namespace BehaviourTree
 {
     public class Talk : InvokeNode
     {
-        Character owner;
-
         ParticleSystem talkingParticles;
         GameObject particlesObject;
 

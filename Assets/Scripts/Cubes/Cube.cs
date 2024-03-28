@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviourTree;
 
-public class Cube : MonoBehaviour
+public class Cube : MonoBehaviour, IServicable
 {
     public GameObject visual;
     Character owner;
@@ -21,6 +21,11 @@ public class Cube : MonoBehaviour
 
     //Every cube also has to have a behaviourtree of things that characters can do in that room
     protected Node tree;
+
+    //Iservicable data
+    public Character asker { get; set; }
+    public Service[] services { get; set; }
+
 
     // Start is called before the first frame update
     void Awake()
@@ -181,6 +186,12 @@ public class Cube : MonoBehaviour
         }
 
         neighbors[direction] = null;
+    }
+
+    public Service GetService(Character _asker, int _index)
+    {
+        asker = _asker;
+        return services[_index];
     }
 
 

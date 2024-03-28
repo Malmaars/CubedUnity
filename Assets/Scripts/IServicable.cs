@@ -6,8 +6,10 @@ using BehaviourTree;
 //interface for objects that can provide a service
 public interface IServicable
 {
-
+    public Character asker { get; set; }
     public Service[] services { get; set; }
+
+    public Service GetService(Character _asker, int _index);
 }
 
 public class Service

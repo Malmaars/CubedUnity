@@ -43,8 +43,10 @@ public class Character : MonoBehaviour, ICharacter, IInventory
     public NeedType serviceType { get; set; }
     public int serviceAmount { get; set; }
 
-    public List<InventoryItem> inventory { get; set; }
+    public List<InventoryItem> inventory { get; set; } = new List<InventoryItem>();
 
+    //a dictionary to save all the found services nodes
+    Dictionary<Type, ServiceNode> foundServices = new Dictionary<Type, ServiceNode>();
 
     public Character target;
     public StateMachine sm;
@@ -121,6 +123,10 @@ public class Character : MonoBehaviour, ICharacter, IInventory
                                         new Selector(
                                             new ForcedSequence(
                                                 new Idle(),
+                                                new Sequence(
+                                                    new CheckForService(this),
+                                                    new ChooseService(this)
+                                                    ),
                                                 //sequence for talking to another character
                                                 new Sequence(
                                                     new LookForTarget(this),
