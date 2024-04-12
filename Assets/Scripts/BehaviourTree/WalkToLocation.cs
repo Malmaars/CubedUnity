@@ -5,7 +5,9 @@ using BehaviourTree;
 
 namespace BehaviourTree
 {
-    //a static general use class for making a character walk to a location (vector3). Should only be used to let characters walk to specific locations outside of the cube system.
+    //a static general use class for making a character walk to a location (vector3).
+    //
+    //!!Should only be used to let characters walk to specific locations outside of the cube system.!!
     public static class WalkToLocation
     {
         public static bool WalkCharacter(Character character, Vector3 newPos)

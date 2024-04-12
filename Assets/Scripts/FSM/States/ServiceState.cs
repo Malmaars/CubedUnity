@@ -18,12 +18,15 @@ public class ServiceState : State
     public void SetTree(Node _tree) { tree = _tree; }
     public override void LogicUpdate()
     {
-        Node.Result result = tree.Run();
+        if (!done) 
+        {
+            Node.Result result = tree.Run();
 
         //When the character is done with the action, it will return themselves to the base state
-        if (result == Node.Result.failed || result == Node.Result.success)
-        {
-            done = true;
+            if (result == Node.Result.failed || result == Node.Result.success)
+            {
+                done = true;
+            }
         }
     }
 

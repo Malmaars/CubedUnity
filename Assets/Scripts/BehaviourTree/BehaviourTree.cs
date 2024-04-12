@@ -45,6 +45,7 @@ namespace BehaviourTree
             if (result == Result.failed || result == Result.success)
             {
                 EndService();
+                return result;
             }
 
             servicable.asker.interacting = true;

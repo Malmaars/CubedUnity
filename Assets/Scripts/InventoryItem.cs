@@ -9,14 +9,18 @@ public class ScriptableItem : ScriptableObject
     public string itemName;
     public GameObject visual;
 }
+
+[System.Serializable]
 public class InventoryItem 
 {
+    public string name;
     public GameObject visual;
     public Animator animator;
 
-    public InventoryItem(GameObject _visual)
+    public InventoryItem(GameObject _visual, string _name)
     {
         CreateItem(_visual);
+        name = _name;
     }
 
     public void CreateItem(GameObject _visual) 

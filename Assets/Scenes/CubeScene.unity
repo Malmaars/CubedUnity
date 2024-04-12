@@ -713,6 +713,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3257796512356817167, guid: 9eb68afb0a32c1d4dbbd80616fcaf47d, type: 3}
+      propertyPath: <myNeeds>k__BackingField.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257796512356817167, guid: 9eb68afb0a32c1d4dbbd80616fcaf47d, type: 3}
       propertyPath: tree.children.Array.data[0].thisNode
       value: 1
       objectReference: {fileID: 0}
@@ -723,6 +727,26 @@ PrefabInstance:
     - target: {fileID: 3257796512356817167, guid: 9eb68afb0a32c1d4dbbd80616fcaf47d, type: 3}
       propertyPath: tree.children.Array.data[2].thisNode
       value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257796512356817167, guid: 9eb68afb0a32c1d4dbbd80616fcaf47d, type: 3}
+      propertyPath: <myNeeds>k__BackingField.Array.data[0].name
+      value: hunger
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257796512356817167, guid: 9eb68afb0a32c1d4dbbd80616fcaf47d, type: 3}
+      propertyPath: <myNeeds>k__BackingField.Array.data[0].type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257796512356817167, guid: 9eb68afb0a32c1d4dbbd80616fcaf47d, type: 3}
+      propertyPath: <myNeeds>k__BackingField.Array.data[1].name
+      value: comfort
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257796512356817167, guid: 9eb68afb0a32c1d4dbbd80616fcaf47d, type: 3}
+      propertyPath: <myNeeds>k__BackingField.Array.data[1].type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257796512356817167, guid: 9eb68afb0a32c1d4dbbd80616fcaf47d, type: 3}
+      propertyPath: <myNeeds>k__BackingField.Array.data[0].meter
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3257796512356817167, guid: 9eb68afb0a32c1d4dbbd80616fcaf47d, type: 3}
       propertyPath: tree.children.Array.data[0].children.Array.size

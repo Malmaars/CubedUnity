@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BehaviourTree;
+using NaughtyAttributes;
 
 public enum characterType
 {
@@ -13,13 +14,6 @@ public enum characterType
     builder,
     samurai,
     skeletonking
-}
-
-public enum characterNeeds
-{
-    hunger,
-    social,
-    relax
 }
 
 [CreateAssetMenu(fileName = "Character", menuName = "ScriptableObjects/Character", order = 1)]
@@ -40,20 +34,16 @@ public class Character : MonoBehaviour, ICharacter, IInventory
     public GameObject actor { get; set; }
     public Animator animator { get; set; }
     public Cube currentRoom { get; set; }
-    public NeedType serviceType { get; set; }
-    public int serviceAmount { get; set; }
+
+
+    [field: SerializeField] public Need[] myNeeds { get; set; } = new Need[] { new Need("hunger", NeedType.hunger) };
 
     public List<InventoryItem> inventory { get; set; } = new List<InventoryItem>();
-
-    //a dictionary to save all the found services nodes
-    Dictionary<Type, ServiceNode> foundServices = new Dictionary<Type, ServiceNode>();
 
     public Character target;
     public StateMachine sm;
 
-    public bool interacting;
-    public bool confused;
-    public bool resetTree;
+    public bool interacting, confused, resetTree;
 
     public string currentState;
 
@@ -135,7 +125,10 @@ public class Character : MonoBehaviour, ICharacter, IInventory
                                                     new FaceOwnerAndTarget(this),
                                                     new Talk(this)),
                                                 new GoToRandomRoom(this)
-                                                    )))),
+                                                    )
+                                            )
+                                        )
+                                    ),
                                 this);
     }
 
@@ -146,6 +139,11 @@ public class Character : MonoBehaviour, ICharacter, IInventory
 
         currentState = sm.currenstate.GetType().ToString();
         //Debug.Log(actor.name + ". Current state: " + sm.currenstate.GetType());
+
+        foreach(Need need in myNeeds)
+        {
+            Debug.Log(need.CalculatePriority());
+        }
     }
 
     public void ResetTree()

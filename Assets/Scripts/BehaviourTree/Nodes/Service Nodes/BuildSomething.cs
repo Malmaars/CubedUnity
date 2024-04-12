@@ -31,15 +31,17 @@ namespace BehaviourTree
                 particlesObject.transform.localPosition = Vector3.up * 2;
                 particlesObject.transform.localScale = Vector3.one;
 
+                item = new InventoryItem(Resources.Load("Items/stool") as GameObject, "stool");
+                item.visual.transform.position = servicable.asker.actor.transform.position - Vector3.right * 0.25f + Vector3.up * 0.28f;
+                item.visual.transform.parent = servicable.asker.actor.transform;
+
                 servicable.asker.actor.transform.forward = -Vector3.forward;
 
                 servicable.asker.currentRoom.occupied = true;
                 servicable.asker.animator.SetBool("Build", true);
                 MakingClouds.Play();
 
-                item = new InventoryItem(Resources.Load("Items/stool") as GameObject);
 
-                item.visual.transform.position = servicable.asker.actor.transform.position + -Vector3.right * 0.25f + Vector3.up * 0.28f;
                 item.DisableItem();
 
                 start = true;
@@ -54,8 +56,6 @@ namespace BehaviourTree
             //play a final animation
             if (timer > 0)
             {
-                Debug.Log(servicable);
-                Debug.Log(servicable.asker);
                 servicable.asker.animator.SetBool("Build", false);
                 servicable.asker.actor.transform.forward = Vector3.forward;
 
