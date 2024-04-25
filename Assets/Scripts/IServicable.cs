@@ -10,23 +10,11 @@ public interface IServicable
     public Service[] services { get; set; }
 
     public Service GetService(Character _asker, int _index);
+
+    public void SetAsker(Character _asker);
+
+    public void EndService();
+
+    public bool beingUsed { get; set; }
 }
 
-public class Service
-{
-    public Service(NeedType _type, int _amount, Node _tree)
-    {
-        serviceType = _type;
-        serviceAmount = _amount;
-        service = _tree;
-    }
-
-    //the type of service
-    public NeedType serviceType;
-
-    //The amount of service this provides
-    public int serviceAmount;
-
-    //the behaviour that it services
-    public Node service;
-}

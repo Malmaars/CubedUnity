@@ -26,6 +26,7 @@ public class Cube : MonoBehaviour, IServicable
     public Character asker { get; set; }
     public Service[] services { get; set; }
 
+    public bool beingUsed { get; set; }
 
     // Start is called before the first frame update
     void Awake()
@@ -99,11 +100,6 @@ public class Cube : MonoBehaviour, IServicable
 
                 //check location, perhaps with a collider check (quick and dirty)
                 Collider[] colliders = Physics.OverlapSphere(newPos, 0.1f);
-
-                foreach(Collider col in colliders)
-                {
-                    Debug.Log(col.gameObject.name);
-                }
 
                 if (colliders.Length == 0)
                 {
@@ -191,7 +187,19 @@ public class Cube : MonoBehaviour, IServicable
     public Service GetService(Character _asker, int _index)
     {
         asker = _asker;
+        occupied = true;
         return services[_index];
+    }
+
+    public void SetAsker(Character _asker)
+    {
+        asker = _asker;
+        beingUsed = true;
+    }
+
+    public void EndService()
+    {
+        occupied = false;
     }
 
 

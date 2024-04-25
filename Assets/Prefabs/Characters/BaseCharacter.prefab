@@ -67,6 +67,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7e994f19f691b2408b8c1df0a6c04e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  home: {fileID: 0}
+  <myNeeds>k__BackingField:
+  - name: hunger
+    type: 0
+    meter: 100
+    importance: 0
+  - name: social
+    type: 2
+    meter: 100
+    importance: 0
+  - name: comfort
+    type: 1
+    meter: 100
+    importance: 0
+  - name: energy
+    type: 3
+    meter: 100
+    importance: 0
+  target: {fileID: 0}
+  interacting: 0
+  confused: 0
+  resetTree: 0
+  currentState: 
 --- !u!1 &974274794665391481
 GameObject:
   m_ObjectHideFlags: 0

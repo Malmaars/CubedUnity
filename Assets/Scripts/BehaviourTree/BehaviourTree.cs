@@ -1,17 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace BehaviourTree
 {
     //Base class for the Nodes
-    public abstract class Node
+    public abstract class Node : ITrackableNode
     {
         //Every Node needs to be able to relay a result, of which there are three options
         public enum Result { success, failed, running }
 
         //Every Node also needs to be able to run
         public abstract Result Run();
+
+        public void UpdateTracking(Character c)
+        {
+            c.currentBehaviour = this.GetType().ToString();
+        }
+    }
+
+    //interface for trackable nodes, ones that can let a character show what their current node is. Made for leaf nodes
+    public interface ITrackableNode
+    {
+        public void UpdateTracking(Character c);
     }
 
     //A node that can grant an item to something
@@ -27,6 +36,7 @@ namespace BehaviourTree
     //service nodes are nodes that can be invoked gathered by a character, and they will invoke it on themselves
     public class ServiceNode : Node
     {
+        bool running;
 
         IServicable servicable;
         //the action they will perform. If it returns failed or success, put the character back into their base state
@@ -48,15 +58,22 @@ namespace BehaviourTree
                 return result;
             }
 
+            servicable.beingUsed = true;
             servicable.asker.interacting = true;
             return result;
         }
 
         protected void EndService()
         {
-            servicable.asker.interacting = false;
-            servicable.asker.ResetTree();
-            servicable.asker = null;
+            Debug.Log("Ending service with " + servicable.asker.actor.name);
+            servicable.EndService();
+            servicable.beingUsed = false;
+            if (servicable.asker != null)
+            {
+                Debug.Log("Resetting " + servicable.asker.actor.name);
+                servicable.asker.interacting = false;
+                servicable.asker = null;
+            }
         }
     }
 
@@ -76,7 +93,6 @@ namespace BehaviourTree
 
         protected void EndReaction()
         {
-            Debug.Log(owner.actor.name);
             owner.interacting = false;
             owner.target.ResetTree();
             owner.target = null;
@@ -332,7 +348,7 @@ namespace BehaviourTree
         }
     }
 
-        //Conditional 
+    //Conditional 
 
     //Base for conditional nodes
     public abstract class ConditionalNode : Node
@@ -362,6 +378,8 @@ namespace BehaviourTree
         ConditionalNode condition;
         Node child;
 
+        bool runningActions;
+
         public Interruptor(ConditionalNode _condition, Node _child)
         {
             condition = _condition;
@@ -380,14 +398,25 @@ namespace BehaviourTree
 
         public override Result Run()
         {
+            if (runningActions)
+            {
+                Result actionResult = actionsUponExit.Run();
+                if (actionResult == Result.failed || actionResult == Result.success)
+                {
+                    runningActions = false;
+                    return actionResult;
+                }
+                return Result.running;
+            }
+
             Result result = condition.Run();
 
             if (result == Result.success)
             {
                 if (actionsUponExit != null)
                 {
-                    actionsUponExit.Run();
-                    
+                    runningActions = true;
+                    return Result.running;
                 }
                 return Result.failed;
             }
@@ -397,6 +426,57 @@ namespace BehaviourTree
             return result;
         }
     }
+    
+    //based on the result of its child, the splitter will pick one of two routes
+    public class Splitter : Node
+    {
+        bool split;
+        Node currentChild, conditionChild, failedChild, succesChild;
+
+        public Splitter(Node condition, Node failed, Node succes)
+        {
+            conditionChild = condition;
+            failedChild = failed;
+            succesChild = succes;
+        }
+
+        public override Result Run()
+        {
+            if (!split)
+            {
+                Result result = conditionChild.Run();
+
+                if (result == Result.failed)
+                {
+                    currentChild = failedChild;
+                    split = true;
+                }
+
+                else if (result == Result.success)
+                {
+                    currentChild = succesChild;
+                    split = true;
+                }
+
+                return Result.running;
+            }
+
+            else
+            {
+                //the splitter has been split, run the split end
+                Result result = currentChild.Run();
+
+                if(result == Result.failed || result == Result.success)
+                {
+                    split = false;
+                    currentChild = null;
+                    return result;
+                }
+                return result;
+            }
+        }
+    }
+
 
     //a decorator can have only one child, and will change the outcome, or the way that child is running
     public class Decorator : Node

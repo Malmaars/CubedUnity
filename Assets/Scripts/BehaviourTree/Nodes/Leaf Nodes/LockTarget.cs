@@ -11,6 +11,8 @@ namespace BehaviourTree
         public LockTarget(Character _owner) { owner = _owner; }
         public override Result Run()
         {
+            UpdateTracking(owner);
+
             if (owner == null || owner.target == null)
                 return Result.failed;
 

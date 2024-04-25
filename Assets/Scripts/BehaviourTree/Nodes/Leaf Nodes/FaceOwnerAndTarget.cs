@@ -15,6 +15,8 @@ namespace BehaviourTree
         public FaceOwnerAndTarget(Character c) { owner = c; }
         public override Result Run()
         {
+            UpdateTracking(owner);
+
             if (owner == null || owner.target == null)
                 return Result.failed;
 

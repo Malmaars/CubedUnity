@@ -12,9 +12,8 @@ public class CheckForService : Node
     {
         //for now we'll simply check if the cube the character is in can provide a service
 
-        if(character.currentRoom.services == null || character.currentRoom.services.Length == 0)
+        if(character.currentRoom.services == null || character.currentRoom.services.Length == 0 || character.currentRoom.beingUsed)
         {
-            Debug.Log("there are no services");
             //there are no services. Search failed
             return Result.failed;
         }

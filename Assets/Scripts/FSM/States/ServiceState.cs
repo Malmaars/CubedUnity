@@ -33,6 +33,7 @@ public class ServiceState : State
     public override void Exit()
     {
         done = false;
+        tree = null;
         base.Exit();
     }
 }

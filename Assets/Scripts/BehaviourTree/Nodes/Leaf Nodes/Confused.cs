@@ -20,6 +20,8 @@ namespace BehaviourTree
         }
         public override Result Run()
         {
+            UpdateTracking(character);
+
             if (timer == 2)
             {
                 character.interacting = true;

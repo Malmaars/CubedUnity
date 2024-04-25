@@ -25,6 +25,8 @@ namespace BehaviourTree
 
         public override Result Run()
         {
+            UpdateTracking(servicable.asker);
+
             if (!start)
             {
                 particlesObject.transform.parent = servicable.asker.actor.transform;
@@ -70,7 +72,6 @@ namespace BehaviourTree
             {
                 timer = 5;
                 item.animator.SetBool("Spin", false);
-                Debug.Log("Adding item to inventory");
                 servicable.asker.AddItemToInventory(item);
                 servicable.asker.currentRoom.occupied = false;
                 servicable.asker.animator.SetTrigger("Return");

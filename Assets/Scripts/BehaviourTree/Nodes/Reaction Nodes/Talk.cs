@@ -26,14 +26,14 @@ namespace BehaviourTree
 
         public override Result Run()
         {
+            UpdateTracking(owner);
             //look for a character to talk to
             if (talking == false)
             {
-                Debug.Log("Starting new conversation");
+
                 if (SearchForCharacter() == Result.failed)
-                {
                     return Result.failed;
-                }
+               
 
                 if (tReaction == null)
                     tReaction = new TalkReaction(owner.target);
@@ -93,6 +93,7 @@ namespace BehaviourTree
         public TalkReaction(Character c) { character = c; }
         public override Result Run()
         {
+            UpdateTracking(character);
             if (done)
             {
                 character.animator.SetBool("Talk", false);

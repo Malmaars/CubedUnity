@@ -735,7 +735,8 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 4359522616433871456, guid: ec1028630778e1f4cadfd54e4b73ef59, type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3687892688721409484, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6340546442367640007, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
     - {fileID: 6312691516392429195, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
@@ -754,7 +755,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6997536074103799810, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1829451271021724427}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 341916566602417645, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2530468491566522150}
   m_SourcePrefab: {fileID: 100100000, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
 --- !u!4 &4082817419939115965 stripped
 Transform:
@@ -776,3 +780,43 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1290250218888459248, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
   m_PrefabInstance: {fileID: 6656312614997624308}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6404472991061245977 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 341916566602417645, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
+  m_PrefabInstance: {fileID: 6656312614997624308}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2530468491566522150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6404472991061245977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41d81e872e934564185f8ac418c7a17d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  home: {fileID: 0}
+  <myNeeds>k__BackingField:
+  - name: hunger
+    type: 0
+    meter: 100
+    importance: 0
+  - name: social
+    type: 2
+    meter: 100
+    importance: 0
+  - name: comfort
+    type: 1
+    meter: 100
+    importance: 0
+  - name: energy
+    type: 3
+    meter: 100
+    importance: 0
+  target: {fileID: 0}
+  interacting: 0
+  confused: 0
+  resetTree: 0
+  currentState: 

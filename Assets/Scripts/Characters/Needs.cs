@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
@@ -21,13 +19,13 @@ public class Need
 
     //The type of need
     [SerializeField]
-    NeedType type;
+    public NeedType type;
 
     //every need has a meter that can go up and down, and determines its importance
 
     [SerializeField]
-    [Range(0, 100)]
-    int meter;
+    [Range(0, 100f)]
+    float meter = 100;
 
     [SerializeField]
     [ProgressBar("Importance", 100, color: EColor.Violet)]
@@ -51,9 +49,14 @@ public class Need
     }
     */
 
-    public void AddToMeter(int _toAdd)
+    public void AddToMeter(float _toAdd)
     {
         meter += _toAdd;
+        if (meter < 0)
+            meter = 0;
+
+        if (meter > 100)
+            meter = 100;
     }
     public float CalculatePriority()
     {
@@ -64,8 +67,14 @@ public class Need
             case NeedType.hunger:
                 temp = Mathf.Pow(2, -(meter - 135) * 0.05f);
                 break;
+            case NeedType.energy:
+                temp = Mathf.Pow(2, -(meter - 86) * 0.075f);
+                break;
             case NeedType.comfort:
                 temp = Mathf.Pow((meter - 50) * 0.15f, 2) + 2;
+                break;
+            case NeedType.social:
+                temp = Mathf.Pow((meter - 57) * 0.14f, 2) + 2;
                 break;
         }
 

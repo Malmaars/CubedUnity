@@ -79,7 +79,9 @@ public class StateMachine
 
     public void ResetState()
     {
+        Debug.Log("Switching to base state");
         SwitchState(GetState(typeof(BaseState)));
+        Debug.Log(currenstate.GetType());
     }
 
 
@@ -90,7 +92,7 @@ public class StateMachine
 
         if(currenstate.GetType() == typeof(ReactionState))
         {
-            //the character is already in a reaction state, so it can't react
+            Debug.Log("the character is already in a reaction state, so it can't react");
             return;
         }
 
@@ -105,6 +107,7 @@ public class StateMachine
 
         reactState.SetTree(reactionNode);
 
+        Debug.Log("Switch to " + reactState.GetType());
         SwitchState(reactState);
     }
 

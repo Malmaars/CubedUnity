@@ -13,13 +13,13 @@ namespace BehaviourTree
         public LookForTarget(Character _owner) { owner = _owner; }
         public override Result Run()
         {
+            UpdateTracking(owner);
             return CheckIfPossible(owner.currentRoom);
         }
 
         List<Cube> visited = new List<Cube>();
         Result CheckIfPossible(Cube origin)
         {
-            Debug.Log("Looking for target");
             visited.Clear();
             if (origin.currentInhabitants.Count > 1 && origin.currentInhabitants.Count < 3)
             {
@@ -33,7 +33,6 @@ namespace BehaviourTree
                     {
                         owner.target = inhabitant;
 
-                        Debug.Log("Found target");
                         return Result.success;
                     }
                 }

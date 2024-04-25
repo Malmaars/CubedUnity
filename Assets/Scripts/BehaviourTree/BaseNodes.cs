@@ -35,14 +35,19 @@ namespace BehaviourTree
 
     public class Idle : Node
     {
-        float timer = Random.Range(2,10);
+        Character character;
+        public Idle(Character c) { character = c; }
+
+        float timer = Random.Range(5,20);
         public override Result Run()
         {
+            UpdateTracking(character);
+            Debug.Log("idling...");
             //play an idle animation, for now we can keep this empty
             timer -= Time.deltaTime;
             if(timer <= 0)
             {
-                timer = Random.Range(2, 10);
+                timer = Random.Range(5, 20);
                 return Result.success;
             }
 

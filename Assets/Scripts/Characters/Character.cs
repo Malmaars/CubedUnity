@@ -29,14 +29,18 @@ public class ScriptableCharacter : ScriptableObject
 }
 
 
-public class Character : MonoBehaviour, ICharacter, IInventory
+public class Character : MonoBehaviour, ICharacter, IInventory, IServicable
 {
     public GameObject actor { get; set; }
     public Animator animator { get; set; }
     public Cube currentRoom { get; set; }
 
+    public Cube home;
 
-    [field: SerializeField] public Need[] myNeeds { get; set; } = new Need[] { new Need("hunger", NeedType.hunger) };
+    [field: SerializeField] public Need[] myNeeds { get; set; } = new Need[] {  new Need("hunger", NeedType.hunger),
+                                                                                new Need("social", NeedType.social),
+                                                                                new Need("comfort", NeedType.comfort),
+                                                                                new Need("energy", NeedType.energy)};
 
     public List<InventoryItem> inventory { get; set; } = new List<InventoryItem>();
 
@@ -45,7 +49,33 @@ public class Character : MonoBehaviour, ICharacter, IInventory
 
     public bool interacting, confused, resetTree;
 
-    public string currentState;
+    public string currentState, currentBehaviour;
+
+    //service variables
+    public Character asker { get; set; }
+    public Service[] services { get; set; }
+
+    //services that the character can provide for themselves
+    public Service[] personalServices;
+
+    public Service GetService(Character _asker, int _index) 
+    {
+        asker = _asker;
+        interacting = true;
+        return services[_index]; 
+    }
+    public void SetAsker(Character _asker)
+    {
+        asker = _asker;
+        beingUsed = true;
+    }
+
+    public void EndService() 
+    {
+        interacting = false;
+    }
+
+    public bool beingUsed { get; set; }
 
     public Cube RequestRoom()
     {
@@ -101,48 +131,64 @@ public class Character : MonoBehaviour, ICharacter, IInventory
     // Start is called before the first frame update
     void Start()
     {
+        Initialize();
+    }
+
+    protected virtual void Initialize()
+    {
         currentRoom = transform.parent.parent.GetComponent<Cube>();
         currentRoom.currentInhabitants.Add(this);
+
+        home = currentRoom;
 
         actor = this.gameObject;
         animator = GetComponent<Animator>();
 
+        personalServices = new Service[]{
+            new Service(this, NeedType.social, 1,
+                        new Sequence(
+                            new LookForTarget(this),
+                            new LockTarget(this),
+                            new GoToTarget(this),
+                            new FaceOwnerAndTarget(this),
+                            new Talk(this)))
+        };
+
+        personalServices = new Service[0];
+
         //The interruptor is so a character can break out of the tree if neccesary
         sm = new StateMachine(new Interruptor(new CheckReset(this), new RemoveReset(this),
-                                    new Interruptor(new CheckConfused(this), new Sequence(new WalkToNearestRoom(this), new Irritated(this)),
-                                        new Selector(
-                                            new ForcedSequence(
-                                                new Idle(),
-                                                new Sequence(
-                                                    new CheckForService(this),
-                                                    new ChooseService(this)
-                                                    ),
-                                                //sequence for talking to another character
-                                                new Sequence(
-                                                    new LookForTarget(this),
-                                                    new LockTarget(this),
-                                                    new GoToTarget(this),
-                                                    new FaceOwnerAndTarget(this),
-                                                    new Talk(this)),
-                                                new GoToRandomRoom(this)
-                                                    )
+                                    new Interruptor(new CheckOccupied(this), new Selector(new LeaveRoom(this), new Irritated(this)),
+                                        new Interruptor(new CheckConfused(this), new Sequence(new WalkToNearestRoom(this), new Irritated(this)),
+                                            new Sequence(
+                                                new ChooseService(this), 
+                                                new Idle(this))
+                                                )
                                             )
-                                        )
-                                    ),
+                                        ),
                                 this);
+
     }
 
     // Update is called once per frame
     void Update()
+    {
+        LogicUpdate();
+    }
+
+    protected virtual void LogicUpdate()
     {
         sm.StateUpdate();
 
         currentState = sm.currenstate.GetType().ToString();
         //Debug.Log(actor.name + ". Current state: " + sm.currenstate.GetType());
 
-        foreach(Need need in myNeeds)
+        foreach (Need need in myNeeds)
         {
-            Debug.Log(need.CalculatePriority());
+
+            //lower needs by time
+            need.AddToMeter(-Time.deltaTime * 0.5f);
+            need.CalculatePriority();
         }
     }
 

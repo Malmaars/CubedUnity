@@ -1,15 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class pathNode : IPoolable
 {
     public bool active { get; set; }
-    public void OnEnableObject()
-    {
-
-    }
+    public void OnEnableObject(){}
     public void OnDisableObject()
     {
         parent = null;
@@ -78,6 +74,7 @@ public static class FindRoom
     }
 
 
+    //Run option where the destination is chosen at random
     public static pathNode Run(Character _character)
     {
         character = _character;
@@ -163,11 +160,14 @@ public static class FindRoom
     {
         foreach (Cube cb in _cube.neighbors)
         {
-            if (cb == null)
+            if (cb == null || visited.Contains(cb))
                 continue;
 
-            if (visited.Contains(cb))
+            if (cb.occupied)
+            {
+                visited.Add(cb);
                 continue;
+            }
 
             if (cb == _destination)
                 return true;
@@ -185,11 +185,14 @@ public static class FindRoom
     {
         foreach (Cube cb in _cube.neighbors)
         {
-            if (cb == null)
+            if (cb == null || visited.Contains(cb))
                 continue;
 
-            if (visited.Contains(cb))
+            if (cb.occupied)
+            {
+                visited.Add(cb);
                 continue;
+            }
 
             if (cb == destination)
                 return true;
@@ -220,11 +223,14 @@ public static class FindRoom
 
             foreach (Cube cb in current.myCube.neighbors)
             {
-                if (cb == null)
+                if (cb == null || closed.ContainsKey(cb))
                     continue;
 
-                if (closed.ContainsKey(cb))
+                if (cb.occupied)
+                {
+                    closed.Add(cb, null);
                     continue;
+                }
 
                 if (!open.ContainsKey(cb) && !closed.ContainsKey(cb))
                 {
@@ -259,6 +265,9 @@ public static class FindRoom
                         //then remove all the other nodes in the closed list to the object pool
                         foreach (KeyValuePair<Cube, pathNode> pair in closed)
                         {
+                            if (pair.Value == null)
+                                continue;
+
                             NodePool.ReturnObjectToPool(pair.Value);
                         }
                         closed.Clear();
@@ -311,7 +320,9 @@ public static class FindRoom
         }
 
         _head = prev;
-
-        return _head;
+        if (_head != null && _head.parent != null)
+            return _head.parent;
+        else
+            return _head;
     }
 }

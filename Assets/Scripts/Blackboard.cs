@@ -29,4 +29,6 @@ public static class Blackboard
     public static pathNode route;
 
     public static Cube currentTarget;
+
+    public static ObjectPool<WalkToRoom> walkPool = new ObjectPool<WalkToRoom>();
 }
