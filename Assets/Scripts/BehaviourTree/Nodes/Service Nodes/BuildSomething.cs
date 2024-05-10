@@ -11,7 +11,7 @@ namespace BehaviourTree
         ParticleSystem MakingClouds;
         GameObject particlesObject;
 
-        float timer = 5;
+        float timer = 8;
         bool start = false;
 
         InventoryItem item;
@@ -40,6 +40,7 @@ namespace BehaviourTree
                 servicable.asker.actor.transform.forward = -Vector3.forward;
 
                 servicable.asker.currentRoom.occupied = true;
+                servicable.asker.interacting = true;
                 servicable.asker.animator.SetBool("Build", true);
                 MakingClouds.Play();
 
@@ -70,7 +71,7 @@ namespace BehaviourTree
 
             else
             {
-                timer = 5;
+                timer = 8;
                 item.animator.SetBool("Spin", false);
                 servicable.asker.AddItemToInventory(item);
                 servicable.asker.currentRoom.occupied = false;
@@ -89,7 +90,6 @@ namespace BehaviourTree
                 particlesObject = Object.Instantiate(Resources.Load("Particles/BuildParticles") as GameObject);
                 MakingClouds = particlesObject.GetComponent<ParticleSystem>();
             }
-
         }
     }
 }

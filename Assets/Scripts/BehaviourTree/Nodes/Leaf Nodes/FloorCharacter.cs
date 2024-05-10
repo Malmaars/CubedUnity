@@ -12,8 +12,9 @@ namespace BehaviourTree {
         public override Result Run()
         {
             UpdateTracking(character);
-            if (character.actor.transform.position.y != character.currentRoom.visual.transform.position.y - 0.48f)
+            if (character.actor.transform.position.y - (character.currentRoom.visual.transform.position.y - 0.48f) < -0.1f || character.actor.transform.position.y - (character.currentRoom.visual.transform.position.y - 0.48f) > 0.1f)
             {
+                Debug.Log("Flooring " + character.actor.name);
                 WalkToLocation.WalkCharacter(character, new Vector3(character.actor.transform.position.x, character.currentRoom.visual.transform.position.y - 0.48f, character.actor.transform.position.z));
                 return Result.running;
             }

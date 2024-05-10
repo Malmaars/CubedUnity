@@ -553,7 +553,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90.00003
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3687892688721409484, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
     m_RemovedGameObjects:
     - {fileID: 8906595652048018447, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
     - {fileID: 6340546442367640007, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
@@ -572,7 +573,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6997536074103799810, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 726239500870979986}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 341916566602417645, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2507435871733832251}
   m_SourcePrefab: {fileID: 100100000, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
 --- !u!4 &2558279355821983223 stripped
 Transform:
@@ -584,6 +588,48 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1290250218888459248, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
   m_PrefabInstance: {fileID: 4537847739843269115}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4199350691078231062 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 341916566602417645, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}
+  m_PrefabInstance: {fileID: 4537847739843269115}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2507435871733832251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4199350691078231062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c415a0c7aa556945a54fa02cb249f9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  home: {fileID: 0}
+  <myNeeds>k__BackingField:
+  - name: hunger
+    type: 0
+    meter: 100
+    importance: 0
+  - name: social
+    type: 2
+    meter: 100
+    importance: 0
+  - name: comfort
+    type: 1
+    meter: 100
+    importance: 0
+  - name: energy
+    type: 3
+    meter: 100
+    importance: 0
+  target: {fileID: 0}
+  interacting: 0
+  confused: 0
+  resetTree: 0
+  currentState: 
+  currentBehaviour: 
+  personalServices: []
 --- !u!4 &6489477861072119730 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7275263662537700937, guid: 45ec0addacacb7342ae806356ab6542b, type: 3}

@@ -145,7 +145,7 @@ public class Character : MonoBehaviour, ICharacter, IInventory, IServicable
         animator = GetComponent<Animator>();
 
         personalServices = new Service[]{
-            new Service(this, NeedType.social, 1,
+            new Service(this, NeedType.social, 15,
                         new Sequence(
                             new LookForTarget(this),
                             new LockTarget(this),
@@ -154,7 +154,10 @@ public class Character : MonoBehaviour, ICharacter, IInventory, IServicable
                             new Talk(this)))
         };
 
-        personalServices = new Service[0];
+        InventoryItem bed = new InventoryItem(Resources.Load("Items/Bed") as GameObject, "Bed");
+        //TODO add a node to go home
+        bed.SetServices(new Service[] {new Service(bed, NeedType.energy, 100, new ServiceNode(bed, new Sequence(new GoHome(bed), new CharacterToCenterOfRoom(bed), new SleepOnItem(bed))))});
+        AddItemToInventory(bed);
 
         //The interruptor is so a character can break out of the tree if neccesary
         sm = new StateMachine(new Interruptor(new CheckReset(this), new RemoveReset(this),
@@ -216,5 +219,29 @@ public class Character : MonoBehaviour, ICharacter, IInventory, IServicable
     {
         inventory.Add(_toAdd);
         _toAdd.DisableItem();
+    }
+
+    public void ResolveService(Service s)
+    {
+        foreach(Need n in myNeeds)
+        {
+            if (n.type == s.serviceType)
+            {
+                n.AddToMeter(s.serviceAmount);
+                break;
+            }
+        }
+    }
+
+    public void ResolveService(NeedType type, float amount)
+    {
+        foreach (Need n in myNeeds)
+        {
+            if (n.type == type)
+            {
+                n.AddToMeter(amount);
+                break;
+            }
+        }
     }
 }

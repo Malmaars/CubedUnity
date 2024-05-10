@@ -65,12 +65,10 @@ namespace BehaviourTree
 
         protected void EndService()
         {
-            Debug.Log("Ending service with " + servicable.asker.actor.name);
             servicable.EndService();
             servicable.beingUsed = false;
             if (servicable.asker != null)
             {
-                Debug.Log("Resetting " + servicable.asker.actor.name);
                 servicable.asker.interacting = false;
                 servicable.asker = null;
             }
@@ -103,7 +101,7 @@ namespace BehaviourTree
     //A node for a node that serves as a reaction. They always return running, and are dependent on the InvokeNode parent.
     public class ReactionNode : Node
     {
-        
+        protected Character character;
         //bool accessed by Invoke Node. When it is called, the ReactionNode knows to finish
         public bool done;
         public override Result Run()
@@ -120,6 +118,8 @@ namespace BehaviourTree
         {
             done = false;
         }
+
+        public virtual void AssignNewOwner(Character c) { character = c; }
     }
 
     //Need nodes are nodes that are dependent on what the character needs.

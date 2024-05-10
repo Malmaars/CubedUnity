@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using BehaviourTree;
 
-public class GetItem : Node
+namespace BehaviourTree
 {
-    public override Result Run()
+    public class GetItem : Node
     {
-        throw new System.NotImplementedException();
+        public override Result Run()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

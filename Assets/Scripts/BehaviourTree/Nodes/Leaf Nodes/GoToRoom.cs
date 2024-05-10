@@ -15,6 +15,7 @@ namespace BehaviourTree
             character = c;
             target = cb;
         }
+
         public override Result Run()
         {
             UpdateTracking(character);

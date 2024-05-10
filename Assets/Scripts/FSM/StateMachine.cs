@@ -86,7 +86,7 @@ public class StateMachine
 
 
     //If a character wants to invoke a reaction, it can call this function on the character they want to invoke the reaction on
-    public void InvokeReaction(Node reactionNode)
+    public void InvokeReaction(Node reactionNode, Character c, NeedType _needType, float _needAmount)
     {
         //set the current state to a Reaction State
 
@@ -105,19 +105,18 @@ public class StateMachine
             reactState = new ReactionState();
         
 
-        reactState.SetTree(reactionNode);
+        reactState.SetVariables(reactionNode, c, _needType, _needAmount);
 
-        Debug.Log("Switch to " + reactState.GetType());
         SwitchState(reactState);
     }
 
-    public void InvokeService(Node serviceNode)
+    public void InvokeService(Service _service, Character _serviced)
     {
         //make a new reaction state
         if (serviceState == null)
             serviceState = new ServiceState();
-        
-        serviceState.SetTree(serviceNode);
+
+        serviceState.SetService(_service, _serviced);
 
         SwitchState(serviceState);
     }

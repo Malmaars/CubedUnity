@@ -11,12 +11,19 @@ public class ScriptableItem : ScriptableObject
 }
 
 [System.Serializable]
-public class InventoryItem 
+public class InventoryItem : IServicable
 {
+    //Iservicable data
+    public Character asker { get; set; }
+    public Service[] services { get; set; }
+
+    public bool beingUsed { get; set; }
+
     public string name;
     public GameObject visual;
     public Animator animator;
 
+    //I don't yet know if it's better to make presets for known items, perhaps if different scripts want to spawn the same item
     public InventoryItem(GameObject _visual, string _name)
     {
         CreateItem(_visual);
@@ -29,6 +36,11 @@ public class InventoryItem
         animator = visual.GetComponentInChildren<Animator>();
     }
 
+    public void SetServices(Service[] _services)
+    {
+        services = _services;
+    }
+
     public void DisableItem()
     {
         visual.SetActive(false);
@@ -37,5 +49,23 @@ public class InventoryItem
     public void EnableItem()
     {
         visual.SetActive(true);
+    }
+
+
+    public Service GetService(Character _asker, int _index)
+    {
+        asker = _asker;
+        return services[_index];
+    }
+
+    public void SetAsker(Character _asker)
+    {
+        asker = _asker;
+        beingUsed = true;
+    }
+
+    public void EndService()
+    {
+
     }
 }

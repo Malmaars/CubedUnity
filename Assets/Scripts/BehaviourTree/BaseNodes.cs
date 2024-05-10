@@ -42,7 +42,6 @@ namespace BehaviourTree
         public override Result Run()
         {
             UpdateTracking(character);
-            Debug.Log("idling...");
             //play an idle animation, for now we can keep this empty
             timer -= Time.deltaTime;
             if(timer <= 0)

@@ -17,6 +17,7 @@ namespace BehaviourTree
                 return Result.failed;
 
             owner.interacting = true;
+
             owner.target.sm.SetToWait();
 
             //this might not be the best way to cancel the current animation

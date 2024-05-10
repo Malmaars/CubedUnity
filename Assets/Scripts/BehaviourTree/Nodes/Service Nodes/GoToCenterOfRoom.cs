@@ -16,7 +16,6 @@ namespace BehaviourTree
         bool running = false;
 
         public GoToCenterOfRoom(IServicable _servicable, Cube _room) { servicable = _servicable; room = _room; }
-
         public override Result Run()
         {
             if (!running)
@@ -28,21 +27,23 @@ namespace BehaviourTree
                 }
                 character = servicable.asker;
                 running = true;
+
+                pathNode path = FindRoom.Run(character, room);
+                path = FindRoom.ReverseList(path);
+                walker = Blackboard.walkPool.RequestItem();
+                walker.AssignData(path, character);
+                running = true;
             }
 
             UpdateTracking(character);
 
             if (character.currentRoom != room)
             {
-                pathNode path = FindRoom.Run(character, room);
-                path = FindRoom.ReverseList(path);
-                walker = Blackboard.walkPool.RequestItem();
-                walker.AssignData(path, character);
-                running = true;
 
                 Result result = walker.WalkToCube();
                 if (result == Result.failed)
                 {
+                    character.confused = true;
                     running = false;
                     return result;
                 }

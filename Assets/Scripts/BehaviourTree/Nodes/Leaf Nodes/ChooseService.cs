@@ -20,14 +20,12 @@ namespace BehaviourTree
             //character.sm.InvokeService(character.currentRoom.GetService(character, 0).service);
 
             //collect all the possible services for the wanted need
-            Debug.Log("Search for services");
             foundServices.Clear();
             foundServices = FindServices.FindAllServices(character);
 
             //couldn't find any services (nearly impossible)
             if (foundServices.Count == 0)
             {
-                Debug.Log("Couldn't find a service");
                 return Result.failed;
             }
 
@@ -81,7 +79,7 @@ namespace BehaviourTree
             Service chosenService = foundServices[Random.Range(0, foundServices.Count)];
             chosenService.parent.SetAsker(character);
 
-            character.sm.InvokeService(chosenService.service);
+            character.sm.InvokeService(chosenService, character);
 
             return Result.success;
         }

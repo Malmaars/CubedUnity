@@ -22,6 +22,8 @@ public class CoroutineRunner : MonoBehaviour
 }
 public static class Blackboard
 {
+    public static Plane depthPlane = new Plane(Vector3.forward, new Vector3(0,0,1));
+
     public static bool debugMode;
 
     public static List<Cube> allCubes = new List<Cube>();

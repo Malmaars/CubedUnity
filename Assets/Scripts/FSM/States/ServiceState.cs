@@ -6,6 +6,8 @@ using BehaviourTree;
 public class ServiceState : State
 {
     Node tree;
+    Service service;
+    Character servicedCharacter;
     bool done;
 
     public ServiceState()
@@ -15,7 +17,12 @@ public class ServiceState : State
     }
 
     //This serves as a way to dictate what the reaction should be.
-    public void SetTree(Node _tree) { tree = _tree; }
+    public void SetService(Service s, Character c) 
+    {
+        service = s;
+        tree = s.service;
+        servicedCharacter = c;
+    }
     public override void LogicUpdate()
     {
         if (!done) 
@@ -25,6 +32,9 @@ public class ServiceState : State
         //When the character is done with the action, it will return themselves to the base state
             if (result == Node.Result.failed || result == Node.Result.success)
             {
+                if (result == Node.Result.success)
+                    servicedCharacter.ResolveService(service);
+
                 done = true;
             }
         }
@@ -34,6 +44,8 @@ public class ServiceState : State
     {
         done = false;
         tree = null;
+        service = null;
+        servicedCharacter = null;
         base.Exit();
     }
 }

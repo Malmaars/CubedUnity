@@ -41,7 +41,7 @@ namespace BehaviourTree
                 else
                     tReaction.AssignNewOwner(owner.target);
 
-                owner.target.sm.InvokeReaction(tReaction);
+                owner.target.sm.InvokeReaction(tReaction, owner.target, NeedType.social, 15);
                 child = tReaction;
 
                 timer = 5;
@@ -89,7 +89,6 @@ namespace BehaviourTree
 
     public class TalkReaction : ReactionNode
     {
-        public Character character;
         public TalkReaction(Character c) { character = c; }
         public override Result Run()
         {
@@ -106,7 +105,5 @@ namespace BehaviourTree
 
             return Result.running;
         }
-
-        public void AssignNewOwner(Character c) { character = c; }
     }
 }

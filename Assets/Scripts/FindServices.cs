@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
+//TODO: add services from held items
 public static class FindServices
 {
     static List<Cube> visited = new List<Cube>();
@@ -27,6 +28,21 @@ public static class FindServices
 
         //depth search for all reachable services
         CheckNeighbours(c.currentRoom);
+
+        //also check inventory items, since these can provide services as well.
+        if(c.inventory.Count > 0)
+        {
+            foreach(InventoryItem it in c.inventory)
+            {
+                if (it.services != null && it.services.Length > 0)
+                {
+                    foreach (Service s in it.services)
+                    {
+                        services.Add(s);
+                    }
+                }
+            }
+        }
 
         return services;
     }
@@ -83,6 +99,19 @@ public static class FindServices
 
         //depth search for all reachable services
         CheckNeighboursByType(c.currentRoom, _type);
+
+        //also check inventory items, since these can provide services as well.
+        if (c.inventory.Count > 0)
+        {
+            foreach (InventoryItem it in c.inventory)
+            {
+                foreach (Service s in it.services)
+                {
+                    if (s.serviceType == _type)
+                        services.Add(s);
+                }
+            }
+        }
 
         return services;
     }

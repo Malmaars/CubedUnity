@@ -16,6 +16,7 @@ public class Cube : MonoBehaviour, IServicable
     Vector3Int oldLoc;
     bool dragging = false;
 
+    GameObject lights;
     //a bool to ensure other characters don't enter the room
     public bool occupied;
 
@@ -81,6 +82,8 @@ public class Cube : MonoBehaviour, IServicable
                 }
             }
         }
+
+        lights = visual.transform.Find("Environment/Lights").gameObject;
     }
 
     // Update is called once per frame
@@ -88,14 +91,14 @@ public class Cube : MonoBehaviour, IServicable
     {
         if (dragging)
         {
-            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 worldPosition = GetWorldPositionOnPlane(Input.mousePosition);
             visual.transform.position = new Vector3(worldPosition.x, worldPosition.y, visual.transform.position.z);
 
             if (Input.GetMouseButtonUp(0))
             {
                 dragging = false;
 
-                Vector3Int newPos = new Vector3Int(Mathf.RoundToInt(worldPosition.x), Mathf.RoundToInt(worldPosition.y), Mathf.RoundToInt(visual.transform.position.z));
+                Vector3Int newPos = new Vector3Int(Mathf.RoundToInt(visual.transform.position.x), Mathf.RoundToInt(visual.transform.position.y), Mathf.RoundToInt(visual.transform.position.z));
                 //snap the cube to the closest location if possible
 
                 //check location, perhaps with a collider check (quick and dirty)
@@ -161,6 +164,14 @@ public class Cube : MonoBehaviour, IServicable
         }
     }
 
+    public Vector3 GetWorldPositionOnPlane(Vector3 screenPosition)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+        float distance;
+        Blackboard.depthPlane.Raycast(ray, out distance);
+        return ray.GetPoint(distance);
+    }
+
     //call this to assign a neighbor to the cube
     public void ConnectNeighbor(Cube _cube, int direction)
     {
@@ -182,6 +193,16 @@ public class Cube : MonoBehaviour, IServicable
         }
 
         neighbors[direction] = null;
+    }
+
+    public void TurnOffLights()
+    {
+        lights.SetActive(false);
+    }
+
+    public void TurnOnLights()
+    {
+        lights.SetActive(true);
     }
 
     public Service GetService(Character _asker, int _index)
