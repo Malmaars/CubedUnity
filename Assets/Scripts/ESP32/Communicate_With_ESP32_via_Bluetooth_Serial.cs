@@ -6,6 +6,8 @@ namespace Communicate_With_ESP32_via_Bluetooth_Serial
 {
     class MainClass
     {
+        static SerialPort port;
+
         public static void Main()
         {
             Debug.Log("Starting ESP connnection");
@@ -39,6 +41,11 @@ namespace Communicate_With_ESP32_via_Bluetooth_Serial
                 Debug.Log("Encountered error while opening serial port");
                 Debug.Log(ex.ToString());
             }
+        }
+
+        public static void Read()
+        {
+            Debug.Log(port.ReadLine());
         }
     }
 }

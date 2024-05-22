@@ -43,6 +43,7 @@ public class Character : MonoBehaviour, ICharacter, IInventory, IServicable
                                                                                 new Need("energy", NeedType.energy)};
 
     public List<InventoryItem> inventory { get; set; } = new List<InventoryItem>();
+    public Dictionary<Character, Relationship> characterRelations = new Dictionary<Character, Relationship>();
 
     public Character target;
     public StateMachine sm;
@@ -144,6 +145,11 @@ public class Character : MonoBehaviour, ICharacter, IInventory, IServicable
         actor = this.gameObject;
         animator = GetComponent<Animator>();
 
+        foreach(Character c in Blackboard.allCharacters)
+        {
+            characterRelations.Add(c,new Relationship(c));
+        }
+
         personalServices = new Service[]{
             new Service(this, NeedType.social, 15,
                         new Sequence(
@@ -152,6 +158,7 @@ public class Character : MonoBehaviour, ICharacter, IInventory, IServicable
                             new GoToTarget(this),
                             new FaceOwnerAndTarget(this),
                             new Talk(this)))
+            //, new Service(this, NeedType.comfort, 10, )
         };
 
         InventoryItem bed = new InventoryItem(Resources.Load("Items/Bed") as GameObject, "Bed");

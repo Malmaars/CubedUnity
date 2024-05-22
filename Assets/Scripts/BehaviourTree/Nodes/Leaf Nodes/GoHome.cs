@@ -28,6 +28,13 @@ namespace BehaviourTree {
                     walker = Blackboard.walkPool.RequestItem();
                     walker.AssignData(path, character);
                     running = true;
+
+                    if (path == null)
+                    {
+                        walker = null;
+                        running = false;
+                        return Result.failed;
+                    }
                 }
 
                 Result result = walker.WalkToCube();

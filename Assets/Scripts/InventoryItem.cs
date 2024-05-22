@@ -18,6 +18,7 @@ public class InventoryItem : IServicable
     public Service[] services { get; set; }
 
     public bool beingUsed { get; set; }
+    public bool placeable, hangable;
 
     public string name;
     public GameObject visual;

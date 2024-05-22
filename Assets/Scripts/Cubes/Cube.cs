@@ -44,19 +44,19 @@ public class Cube : MonoBehaviour, IServicable
         //for now I want to let the cubes assign their neighbors on startup, so I don't have to manually input it every time
 
         //if there is no collider at the overlapsphere, the query should be stopped
-        Collider[] colTemp = Physics.OverlapSphere(visual.transform.position - Vector3.left, 0.1f);
+        Collider[] colTemp = Physics.OverlapSphere(visual.transform.position - Vector3.left, 0.1f, 1<<6);
         if (colTemp.Length > 0)
             ConnectNeighbor(colTemp[0].GetComponent<Cube>(), 0);
 
-        colTemp = Physics.OverlapSphere(visual.transform.position + Vector3.up, 0.1f);
+        colTemp = Physics.OverlapSphere(visual.transform.position + Vector3.up, 0.1f, 1 << 6);
         if (colTemp.Length > 0)
             ConnectNeighbor(colTemp[0].GetComponent<Cube>(), 1);
 
-        colTemp = Physics.OverlapSphere(visual.transform.position + Vector3.left, 0.1f);
+        colTemp = Physics.OverlapSphere(visual.transform.position + Vector3.left, 0.1f, 1 << 6);
         if (colTemp.Length > 0)
             ConnectNeighbor(colTemp[0].GetComponent<Cube>(), 2);
 
-        colTemp = Physics.OverlapSphere(visual.transform.position - Vector3.up, 0.1f);
+        colTemp = Physics.OverlapSphere(visual.transform.position - Vector3.up, 0.1f, 1 << 6);
         if (colTemp.Length > 0)
             ConnectNeighbor(colTemp[0].GetComponent<Cube>(), 3);
 
@@ -91,8 +91,14 @@ public class Cube : MonoBehaviour, IServicable
     {
         if (dragging)
         {
-            Vector3 worldPosition = GetWorldPositionOnPlane(Input.mousePosition);
-            visual.transform.position = new Vector3(worldPosition.x, worldPosition.y, visual.transform.position.z);
+            Vector2 view = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+            bool isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
+
+            if (!isOutside)
+            {
+                Vector3 worldPosition = GetWorldPositionOnPlane(Input.mousePosition);
+                visual.transform.position = new Vector3(worldPosition.x, worldPosition.y, visual.transform.position.z);
+            }
 
             if (Input.GetMouseButtonUp(0))
             {
@@ -102,7 +108,7 @@ public class Cube : MonoBehaviour, IServicable
                 //snap the cube to the closest location if possible
 
                 //check location, perhaps with a collider check (quick and dirty)
-                Collider[] colliders = Physics.OverlapSphere(newPos, 0.1f);
+                Collider[] colliders = Physics.OverlapSphere(newPos, 0.1f, 1 << 6);
 
                 if (colliders.Length == 0)
                 {
@@ -120,19 +126,19 @@ public class Cube : MonoBehaviour, IServicable
 
 
                 //if there is no collider at the overlapsphere, the query should be stopped
-                Collider[] colTemp = Physics.OverlapSphere(visual.transform.position - Vector3.left, 0.1f);
+                Collider[] colTemp = Physics.OverlapSphere(visual.transform.position - Vector3.left, 0.1f, 1 << 6);
                 if (colTemp.Length > 0)
                     ConnectNeighbor(colTemp[0].GetComponent<Cube>(), 0);
 
-                colTemp = Physics.OverlapSphere(visual.transform.position + Vector3.up, 0.1f);
+                colTemp = Physics.OverlapSphere(visual.transform.position + Vector3.up, 0.1f, 1 << 6);
                 if (colTemp.Length > 0)
                     ConnectNeighbor(colTemp[0].GetComponent<Cube>(), 1);
 
-                colTemp = Physics.OverlapSphere(visual.transform.position + Vector3.left, 0.1f);
+                colTemp = Physics.OverlapSphere(visual.transform.position + Vector3.left, 0.1f, 1 << 6);
                 if (colTemp.Length > 0)
                     ConnectNeighbor(colTemp[0].GetComponent<Cube>(), 2);
                 
-                colTemp = Physics.OverlapSphere(visual.transform.position - Vector3.up, 0.1f);
+                colTemp = Physics.OverlapSphere(visual.transform.position - Vector3.up, 0.1f, 1 << 6);
                 if (colTemp.Length > 0)
                     ConnectNeighbor(colTemp[0].GetComponent<Cube>(), 3);
 
