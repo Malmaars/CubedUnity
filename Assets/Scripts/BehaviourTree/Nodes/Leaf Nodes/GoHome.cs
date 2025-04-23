@@ -59,6 +59,13 @@ namespace BehaviourTree {
                         return Result.success;
                     pathNode path = FindRoom.Run(servicable.asker, servicable.asker.home);
                     path = FindRoom.ReverseList(path);
+
+                    if (path == null)
+                    {
+                        running = false;
+                        return Result.failed;
+                    }
+
                     walker = Blackboard.walkPool.RequestItem();
                     walker.AssignData(path, servicable.asker);
                     running = true;
@@ -73,11 +80,11 @@ namespace BehaviourTree {
                     running = false;
                 }
                 return result;
-
             }
 
             else
             {
+                running = false;
                 return Result.failed;
             }
         }

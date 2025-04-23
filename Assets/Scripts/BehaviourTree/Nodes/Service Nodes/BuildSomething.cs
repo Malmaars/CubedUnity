@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ namespace BehaviourTree
         ParticleSystem MakingClouds;
         GameObject particlesObject;
 
+        GameObject[] AllObjects;
+
         float timer = 8;
         bool start = false;
 
@@ -19,6 +22,8 @@ namespace BehaviourTree
         public BuildSomething(IServicable _servicable)
         {
             Initialize(_servicable);
+            AllObjects = Resources.LoadAll("Items/Buildable", typeof(GameObject)).Cast<GameObject>().ToArray();
+            Debug.Log(AllObjects.Length);
         }
 
         //since this is a node for a cube, it needs to be able to be passed on to different characters. So the character needs to be able to be reassigned
@@ -33,7 +38,9 @@ namespace BehaviourTree
                 particlesObject.transform.localPosition = Vector3.up * 2;
                 particlesObject.transform.localScale = Vector3.one;
 
-                item = new InventoryItem(Resources.Load("Items/stool") as GameObject, "stool");
+
+                GameObject randomItem = AllObjects[Random.Range(0, AllObjects.Length)];
+                item = new InventoryItem(randomItem);
                 item.visual.transform.position = servicable.asker.actor.transform.position - Vector3.right * 0.25f + Vector3.up * 0.28f;
                 item.visual.transform.parent = servicable.asker.actor.transform;
 

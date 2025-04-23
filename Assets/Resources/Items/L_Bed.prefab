@@ -64,7 +64,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2238088803332026024}
   m_Layer: 0
-  m_Name: Bed
+  m_Name: L_Bed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

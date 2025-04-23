@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace BehaviourTree 
 {
@@ -26,6 +27,13 @@ namespace BehaviourTree
                 {
                     pathNode path = FindRoom.Run(character, targetCube);
                     path = FindRoom.ReverseList(path);
+
+                    if(path == null)
+                    {
+                        return Result.failed;
+                    }
+
+                    Debug.Log(path);
                     walker = Blackboard.walkPool.RequestItem();
                     walker.AssignData(path, character);
                     running = true;

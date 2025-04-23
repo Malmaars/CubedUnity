@@ -34,6 +34,8 @@ namespace BehaviourTree
             if (result == Result.success || result == Result.failed)
             {
                 //end the service, we're done painting
+                owner.characterRelations[owner.target].AddFriendshipAmount(5);
+                owner.target.characterRelations[owner].AddFriendshipAmount(5);
                 running = false;
                 EndReaction();
                 return result;

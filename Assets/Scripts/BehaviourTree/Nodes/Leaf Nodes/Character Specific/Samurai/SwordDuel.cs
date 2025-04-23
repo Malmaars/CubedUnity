@@ -34,6 +34,9 @@ namespace BehaviourTree
                     //decide who wins the duel, for now the samurai always wins
                     owner.animator.Play("Celebrate");
                     owner.target.animator.Play("Defeated");
+                    owner.characterRelations[owner.target].AddFriendshipAmount(5f);
+                    owner.target.characterRelations[owner].AddFriendshipAmount(-5f);
+
                     timer = 5;
                     finishing = true;
                 }

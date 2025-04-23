@@ -1100,6 +1100,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6793898125861785498, guid: 9eb68afb0a32c1d4dbbd80616fcaf47d, type: 3}
+      propertyPath: <myNeeds>k__BackingField.Array.data[2].meter
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8712671210595042257, guid: 9eb68afb0a32c1d4dbbd80616fcaf47d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 61.839962

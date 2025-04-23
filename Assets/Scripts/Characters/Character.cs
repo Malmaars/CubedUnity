@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviourTree;
 using NaughtyAttributes;
+using AYellowpaper.SerializedCollections;
 
 public enum characterType
 {
@@ -43,7 +44,9 @@ public class Character : MonoBehaviour, ICharacter, IInventory, IServicable
                                                                                 new Need("energy", NeedType.energy)};
 
     public List<InventoryItem> inventory { get; set; } = new List<InventoryItem>();
-    public Dictionary<Character, Relationship> characterRelations = new Dictionary<Character, Relationship>();
+
+    [SerializedDictionary("ID", "Person")]
+    public SerializedDictionary<Character, Relationship> characterRelations = new SerializedDictionary<Character, Relationship>();
 
     public Character target;
     public StateMachine sm;
@@ -159,20 +162,19 @@ public class Character : MonoBehaviour, ICharacter, IInventory, IServicable
                             new FaceOwnerAndTarget(this),
                             new Talk(this)))
             //, new Service(this, NeedType.comfort, 10, )
+            , new Service(this, NeedType.energy, 10, new Idle(this))
         };
 
-        InventoryItem bed = new InventoryItem(Resources.Load("Items/Bed") as GameObject, "Bed");
+        InventoryItem bed = new InventoryItem(Resources.Load("Items/L_Bed") as GameObject);
         //TODO add a node to go home
         bed.SetServices(new Service[] {new Service(bed, NeedType.energy, 100, new ServiceNode(bed, new Sequence(new GoHome(bed), new CharacterToCenterOfRoom(bed), new SleepOnItem(bed))))});
         AddItemToInventory(bed);
 
         //The interruptor is so a character can break out of the tree if neccesary
-        sm = new StateMachine(new Interruptor(new CheckReset(this), new RemoveReset(this),
-                                    new Interruptor(new CheckOccupied(this), new Selector(new LeaveRoom(this), new Irritated(this)),
-                                        new Interruptor(new CheckConfused(this), new Sequence(new WalkToNearestRoom(this), new Irritated(this)),
-                                            new Sequence(
-                                                new ChooseService(this), 
-                                                new Idle(this))
+        sm = new StateMachine(new Interruptor(new CheckReset(this), new Sequence(new ResetTarget(this), new RemoveReset(this)),
+                                    new Interruptor(new CheckOccupied(this), new Sequence(new ResetTarget(this), new LeaveRoom(this), new Irritated(this)),
+                                        new Interruptor(new CheckConfused(this), new Sequence(new ResetTarget(this), new WalkToNearestRoom(this), new Irritated(this)),
+                                                new ChooseService(this)
                                                 )
                                             )
                                         ),
@@ -197,13 +199,14 @@ public class Character : MonoBehaviour, ICharacter, IInventory, IServicable
         {
 
             //lower needs by time
-            need.AddToMeter(-Time.deltaTime * 0.5f);
+            need.AddToMeter(-Time.deltaTime * 2f);
             need.CalculatePriority();
         }
     }
 
     public void ResetTree()
     {
+        sm.ResetState();
         resetTree = true;
     }
 
@@ -217,7 +220,8 @@ public class Character : MonoBehaviour, ICharacter, IInventory, IServicable
 
     public void RemoveTarget()
     {
-        target.sm.ResetState();
+        if (target != null)
+            target.sm.ResetState();
         interacting = false;
         target = null;
     }

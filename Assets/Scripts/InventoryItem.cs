@@ -10,6 +10,13 @@ public class ScriptableItem : ScriptableObject
     public GameObject visual;
 }
 
+public enum itemSize
+{
+    Small,
+    Medium,
+    Large
+}
+
 [System.Serializable]
 public class InventoryItem : IServicable
 {
@@ -24,11 +31,36 @@ public class InventoryItem : IServicable
     public GameObject visual;
     public Animator animator;
 
+    public itemSize size;
+
     //I don't yet know if it's better to make presets for known items, perhaps if different scripts want to spawn the same item
-    public InventoryItem(GameObject _visual, string _name)
+    public InventoryItem(GameObject _visual)
     {
         CreateItem(_visual);
-        name = _name;
+        //get the first letter of the name of the object, it will determine its size
+        char[] visualName = visual.name.ToCharArray();
+
+        switch (visualName[0])
+        {
+            case 'S':
+                size = itemSize.Small;
+                break;
+            case 'M':
+                size = itemSize.Medium;
+                break;
+            case 'L':
+                size = itemSize.Large;
+                break;
+        }
+
+        //the name of the item will start from the 3rd letter
+
+        char[] itemName = new char[visualName.Length - 2];
+        for(int i = 0; i < itemName.Length; i++)
+        {
+            itemName[i] = visualName[i + 2];
+        }
+        name = new string(itemName);
     }
 
     public void CreateItem(GameObject _visual) 

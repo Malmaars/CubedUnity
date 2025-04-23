@@ -17,7 +17,6 @@ public class Gamemanager : MonoBehaviour
     {
         Blackboard.debugMode = debugMode;
         Blackboard.allCharacters = FindObjectsOfType<Character>();
-        Debug.Log(Blackboard.allCharacters.Length);
         //Blackboard.allCubes = allCubes;
     }
 
